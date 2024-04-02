@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 # phylepic
 
 <!-- badges: start -->
+[![r-universe status](https://cidm-ph.r-universe.dev/badges/phylepic)](https://cidm-ph.r-universe.dev)
+[![R-CMD-check](https://github.com/cidm-ph/phylepic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cidm-ph/phylepic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Phylepic contains tools for visualisations that are useful for genomic epidemiology
@@ -27,16 +29,14 @@ You can install phylepic like so:
 
 ``` r
 # development version
-devtools::install_github("cidm-ph/phylepic")
 install.packages('phylepic', repos = c('https://cidmp-ph.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Example
 
-This is an example of a very minimal phylepic chart. Refer to the package
-vignette for a more complete example.
+This is an example of a very minimal phylepic chart.
 
-```{r example, fig.width=7, fig.height=4}
+```{r example, fig.width=7, fig.height=4, eval = F}
 library(ape)
 library(phylepic)
 
@@ -49,3 +49,5 @@ metadata <- data.frame(
 
 phylepic(tree, metadata, ID, date) |> plot()
 ```
+
+Refer to [the package vignette](https://cidm-ph.github.io/phylepic/articles/phylepic.html) for a more complete example.

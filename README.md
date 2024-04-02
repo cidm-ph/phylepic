@@ -4,6 +4,10 @@
 # phylepic
 
 <!-- badges: start -->
+
+[![r-universe
+status](https://cidm-ph.r-universe.dev/badges/phylepic)](https://cidm-ph.r-universe.dev)
+[![R-CMD-check](https://github.com/cidm-ph/phylepic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cidm-ph/phylepic/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 Phylepic contains tools for visualisations that are useful for genomic
@@ -15,14 +19,12 @@ You can install phylepic like so:
 
 ``` r
 # development version
-devtools::install_github("cidm-ph/phylepic")
 install.packages('phylepic', repos = c('https://cidmp-ph.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Example
 
-This is an example of a very minimal phylepic chart. Refer to the
-package vignette for a more complete example.
+This is an example of a very minimal phylepic chart.
 
 ``` r
 library(ape)
@@ -38,4 +40,6 @@ metadata <- data.frame(
 phylepic(tree, metadata, ID, date) |> plot()
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+Refer to [the package
+vignette](https://cidm-ph.github.io/phylepic/articles/phylepic.html) for
+a more complete example.
