@@ -1,7 +1,6 @@
-url: ~
+url: https://cidm-ph.github.io/phylepic/
 template:
   bootstrap: 5
-
 reference:
 - title: Phylepic charts
   contents:
@@ -26,3 +25,4 @@ reference:
   - create_tree_layout
   - geom_node_text_filled
   - drop.clade
+

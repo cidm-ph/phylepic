@@ -35,5 +35,5 @@ Imports:
     scales,
     tidygraph,
     vctrs
-URL: https://github.com/cidm-ph/phylepic
+URL: https://github.com/cidm-ph/phylepic, https://cidm-ph.github.io/phylepic/
 BugReports: https://github.com/cidm-ph/phylepic/issues
