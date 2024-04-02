@@ -1,0 +1,28 @@
+url: ~
+template:
+  bootstrap: 5
+
+reference:
+- title: Phylepic charts
+  contents:
+  - phylepic
+  - plot.phylepic
+  - autoplot.phylepic
+  - plot_bars
+  - plot_calendar
+  - plot_epicurve
+  - plot_tree
+- title: Week-binned dates
+  contents:
+  - geom_calendar
+  - scale_x_week
+  - stat_week
+  - stat_week_2d
+  - week_breaks
+  - oob_infinite
+- title: Phylogenetic tree drawing
+  contents:
+  - coord_tree
+  - create_tree_layout
+  - geom_node_text_filled
+  - drop.clade

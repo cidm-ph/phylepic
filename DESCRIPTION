@@ -1,0 +1,39 @@
+Package: phylepic
+Title: Combined Visualisation of Phylogenetic and Epidemiological Data
+Version: 0.1.0
+Authors@R: 
+    c(person(given = "Carl",
+             family = "Suster",
+             email = "Carl.Suster@health.nsw.gov.au",
+             role = c("aut", "cre"),
+             comment = c(ORCID = "0000-0001-7021-9380")),
+      person("Western Sydney Local Health District, NSW Health",
+             role = "cph"))
+Description: A collection of utilities and ggplot extensions to assist with
+  visualisations in genomic epidemiology. This includes the phylepic chart, a
+  visual combination of a phylogenetic tree and a matched epidemic curve. The
+  included ggplot expensions such as date axes binned by week are relevant for
+  other applications in epidemiology and beyond.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Imports: 
+    ape,
+    cli,
+    cowplot,
+    dplyr,
+    forcats,
+    ggnewscale,
+    ggplot2 (>= 3.5.0),
+    ggraph,
+    rlang,
+    scales,
+    tidygraph,
+    vctrs
+URL: https://github.com/cidm-ph/phylepic
+BugReports: https://github.com/cidm-ph/phylepic/issues

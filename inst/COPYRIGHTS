@@ -1,0 +1,9 @@
+R/bin.R
+  © 2020 ggplot2 authors
+  This file was taken from ggplot2 version 4.5.0, with minor changes (as noted
+  in the file itself) to make it work as a standalone file.
+
+R/helpers_ggplot.R (part)
+  © 2020 ggplot2 authors
+  The small functions at the bottom of this file are inlined from ggplot2
+  version 4.5.0. The remainder of this file follows the phylepic copyright.
