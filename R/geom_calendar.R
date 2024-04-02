@@ -14,8 +14,12 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
   draw_key = ggplot2::draw_key_polygon,
 
   setup_data = function(data, params) {
-    data$width <- data$width %||% params$width %||% ggplot2::resolution(data$x, FALSE)
-    data$height <- data$height %||% params$height %||% ggplot2::resolution(data$y, FALSE)
+    data$width <- data$width %||%
+      params$width %||%
+      ggplot2::resolution(data$x, FALSE)
+    data$height <- data$height %||%
+      params$height %||%
+      ggplot2::resolution(data$y, FALSE)
 
     transform(
       data,
@@ -24,9 +28,12 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
     )
   },
 
-  draw_panel = function(self, data, panel_params, coord, lineend = "butt", linejoin = "mitre", label_params = list()) {
-    inf <- data[is.infinite(data$x),]
-    data <- data[is.finite(data$x),]
+  draw_panel = function(
+    self, data, panel_params, coord, lineend = "butt", linejoin = "mitre",
+    label_params = list()
+  ) {
+    inf <- data[is.infinite(data$x), ]
+    data <- data[is.finite(data$x), ]
     coords <- coord$transform(data, panel_params)
 
     tiles <- grid::rectGrob(
@@ -108,16 +115,16 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 #'
 #' @export
 geom_calendar <- function(
-    mapping = NULL,
-    data = NULL,
-    stat = "identity",
-    position = "identity",
-    ...,
-    linejoin = "mitre",
-    label_params = list(),
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  linejoin = "mitre",
+  label_params = list(),
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
 ) {
   ggplot2::layer(
     data = data,

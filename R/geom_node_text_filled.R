@@ -17,8 +17,8 @@
 #' @return Layer that draws text and background grobs
 #' @export
 geom_node_text_filled <- function(
-    mapping = NULL, data = NULL, position = 'identity', parse = FALSE,
-    check_overlap = FALSE, show.legend = NA, ...
+  mapping = NULL, data = NULL, position = "identity", parse = FALSE,
+  check_overlap = FALSE, show.legend = NA, ...
 ) {
   params <- rlang::list2(parse = parse, ...)
   stat <- ggraph::StatFilter
@@ -41,7 +41,7 @@ geom_node_text_filled <- function(
 #' @format NULL
 #' @rdname geom_node_text_filled
 GeomTextFilled <- ggplot2::ggproto("GeomTextFilled", ggplot2::GeomText,
-  draw_panel = function(data, panel_params, coord, ... ) {
+  draw_panel = function(data, panel_params, coord, ...) {
     grob <- ggplot2::GeomText$draw_panel(data, panel_params, coord, ...)
 
     if (length(grob$y) < 2) {
@@ -60,7 +60,7 @@ GeomTextFilled <- ggplot2::ggproto("GeomTextFilled", ggplot2::GeomText,
         unit(0, "native")
       ),
       y = grid::unit.c(
-        rep(grob$y[order] - height_full/2, each = 2),
+        rep(grob$y[order] - height_full / 2, each = 2),
         unit(c(1, 1), "native")
       ),
       gp = grid::gpar(fill = "white", col = NA, linetype = 0)

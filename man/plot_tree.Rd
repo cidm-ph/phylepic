@@ -11,20 +11,22 @@ plot_tree(phylepic, label = .data$name, bootstrap = TRUE)
 
 \item{label}{variable in metadata table corresponding to the tip labels (tidy-eval).}
 
-\item{bootstrap}{when \code{TRUE}, draw bootstrap vaues on the tree. These are only
-drawn if they are detected from the node labels having the form "a/b" where both
-"a" and "b" are numbers. Currently, the bootstrap values are displayed as a
-percentage, suppressing zero values and values for very short branches. To
-customise the appearance or details instead use \code{bootstrap = FALSE} and add
-your own layer with \link[ggraph:geom_edge_elbow]{ggraph::geom_edge_elbow}.}
+\item{bootstrap}{when \code{TRUE}, draw bootstrap vaues on the tree. These are
+only drawn if they are detected from the node labels having the form "a/b"
+where both "a" and "b" are numbers. Currently, the bootstrap values are
+displayed as a percentage, suppressing zero values and values for very
+short branches. To customise the appearance or details instead use
+\code{bootstrap = FALSE} and add your own layer with \link[ggraph:geom_edge_elbow]{ggraph::geom_edge_elbow}.}
 }
 \value{
-If \code{phylepic} is specified returns a ggplot, otherwise a function that
-when passed a "phylepic" object produces a ggplot for use with \code{\link[=plot.phylepic]{plot.phylepic()}}.
+If \code{phylepic} is specified returns a ggplot, otherwise a function
+that when passed a "phylepic" object produces a ggplot for use with
+\code{\link[=plot.phylepic]{plot.phylepic()}}.
 }
 \description{
 The tree is drawn using {ggraph} with its dendrogram layout. When
-customising it, you may wish to add layers such as \code{\link[ggraph:geom_node_point]{ggraph::geom_node_point()}}.
+customising it, you may wish to add layers such as
+\code{\link[ggraph:geom_node_point]{ggraph::geom_node_point()}}.
 The metadata table is joined onto the tree, so all its column names are
 available for use in the various {ggraph} geoms.
 }

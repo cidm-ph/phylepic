@@ -158,8 +158,8 @@ plot(
   plot.tree = function(x) {
     # this function will be called with x = phydata
     plot_tree(x) +
-    ggraph::geom_node_point(aes(filter = leaf, colour = cluster), size = 2) +
-    cluster_scale
+      ggraph::geom_node_point(aes(filter = leaf, colour = cluster), size = 2) +
+      cluster_scale
   },
   plot.bars = function(x) {
     plot_bars(
@@ -220,11 +220,13 @@ plot(
   phydata,
   plot.tree = function(x) {
     plot_tree(x) +
-    ggraph::geom_node_point(aes(filter = leaf, colour = cluster), size = 2) +
-    cluster_scale
+      ggraph::geom_node_point(aes(filter = leaf, colour = cluster), size = 2) +
+      cluster_scale
   },
   plot.bars = plot_bars(
-    source = scale_fill_hue(name = "Source", h.start = 30, drop = FALSE, na.translate = FALSE),
+    source = scale_fill_hue(
+      name = "Source", h.start = 30, drop = FALSE, na.translate = FALSE
+    ),
   ),
   plot.epicurve = plot_epicurve(fill = cluster),
   plot.calendar = plot_calendar(

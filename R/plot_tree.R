@@ -1,25 +1,27 @@
 #' Plot phylogenetic tree panel
 #'
 #' The tree is drawn using {ggraph} with its dendrogram layout. When
-#' customising it, you may wish to add layers such as [ggraph::geom_node_point()].
+#' customising it, you may wish to add layers such as
+#' [ggraph::geom_node_point()].
 #' The metadata table is joined onto the tree, so all its column names are
 #' available for use in the various {ggraph} geoms.
 #'
 #' @param phylepic object of class "phylepic".
 #' @param label variable in metadata table corresponding to the tip labels (tidy-eval).
-#' @param bootstrap when `TRUE`, draw bootstrap vaues on the tree. These are only
-#'   drawn if they are detected from the node labels having the form "a/b" where both
-#'   "a" and "b" are numbers. Currently, the bootstrap values are displayed as a
-#'   percentage, suppressing zero values and values for very short branches. To
-#'   customise the appearance or details instead use `bootstrap = FALSE` and add
-#'   your own layer with [ggraph::geom_edge_elbow].
+#' @param bootstrap when `TRUE`, draw bootstrap vaues on the tree. These are
+#'   only drawn if they are detected from the node labels having the form "a/b"
+#'   where both "a" and "b" are numbers. Currently, the bootstrap values are
+#'   displayed as a percentage, suppressing zero values and values for very
+#'   short branches. To customise the appearance or details instead use
+#'   `bootstrap = FALSE` and add your own layer with [ggraph::geom_edge_elbow].
 #'
-#' @return If `phylepic` is specified returns a ggplot, otherwise a function that
-#' when passed a "phylepic" object produces a ggplot for use with [plot.phylepic()].
+#' @return If `phylepic` is specified returns a ggplot, otherwise a function
+#'  that when passed a "phylepic" object produces a ggplot for use with
+#'  [plot.phylepic()].
 #' @family phylepic plots
 #' @export
 plot_tree <- function(phylepic, label = .data$name, bootstrap = TRUE) {
-  wrapper <- function (x) {
+  wrapper <- function(x) {
     tip_data <- NULL
     if (is.phylepic(x)) tip_data <- as.data.frame(x)
 
@@ -27,22 +29,22 @@ plot_tree <- function(phylepic, label = .data$name, bootstrap = TRUE) {
     x_width <- max(tr_layout$x)
 
     p <- ggplot2::ggplot(tr_layout) +
-    geom_node_text_filled(
-      aes(label = {{label}}, filter = .data$leaf),
-      size = 3,
-      hjust = 0,
-      position = ggplot2::position_nudge(x = 0.01 * x_width),
-      colour = "#666666"
-    ) +
-    ggraph::geom_edge_elbow(flipped = TRUE)
+      geom_node_text_filled(
+        aes(label = {{label}}, filter = .data$leaf),
+        size = 3,
+        hjust = 0,
+        position = ggplot2::position_nudge(x = 0.01 * x_width),
+        colour = "#666666"
+      ) +
+      ggraph::geom_edge_elbow(flipped = TRUE)
 
-    if (bootstrap & (".phylepic.bootstrap_numeric" %in% colnames(tr_layout))) {
+    if (bootstrap && (".phylepic.bootstrap_numeric" %in% colnames(tr_layout))) {
       p <- p + ggraph::geom_edge_elbow(
         aes(
           filter = (
             (!.data$node2.leaf) &
-            (length >= 0.05 * max(length)) &
-            round(.data$node2..phylepic.bootstrap_numeric, digits = 0) > 0
+              (length >= 0.05 * max(length)) &
+              round(.data$node2..phylepic.bootstrap_numeric, digits = 0) > 0
           ),
           label = round(.data$node2..phylepic.bootstrap_numeric, digits = 0)
         ),
@@ -56,13 +58,13 @@ plot_tree <- function(phylepic, label = .data$name, bootstrap = TRUE) {
     }
 
     p +
-    ggplot2::scale_x_continuous(
-      expand = ggplot2::expansion(mult = c(0, 0.2)),
-      transform = "reverse"
-    ) +
-    ggplot2::scale_y_continuous(expand = ggplot2::expansion(add = 0.5)) +
-    theme_plot_tree() +
-    coord_tree()
+      ggplot2::scale_x_continuous(
+        expand = ggplot2::expansion(mult = c(0, 0.2)),
+        transform = "reverse"
+      ) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(add = 0.5)) +
+      theme_plot_tree() +
+      coord_tree()
   }
 
   if (missing(phylepic)) wrapper else wrapper(phylepic)
@@ -100,7 +102,7 @@ conform_plot_tree <- function(plot) {
     })
   }
 
-  lo_errors = c()
+  lo_errors <- c()
   if (! inherits(plot$data, "layout_tbl_graph")) {
     lo_errors <- c(lo_errors, "x" = "{.arg plot.tree} must be a graph layout prepared by {.pkg ggraph}")
   }

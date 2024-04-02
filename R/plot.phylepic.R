@@ -8,7 +8,8 @@
 #' In general, if you wish to suppress a panel from the plot, set the
 #' corresponding `plot.*` argument to `NULL`. To customise it, use the
 #' corresponding `plot_*()` function, which returns a ggplot plot. You can then
-#' add new layers or themes to that plot. See `vignette("phylepic")` for examples.
+#' add new layers or themes to that plot. See `vignette("phylepic")` for
+#' examples.
 #'
 #' Legends from all panels are collected and de-duplicated. They are drawn on
 #' the right edge of the overall plot.
@@ -41,19 +42,19 @@ plot.phylepic <- function(x, ...) {
 #' @param ... Ignored.
 #' @rdname plot.phylepic
 autoplot.phylepic <- function(
-    object,
-    ...,
-    plot.tree = plot_tree(),
-    plot.bars = plot_bars(),
-    plot.calendar = plot_calendar(),
-    plot.epicurve = plot_epicurve(),
-    scale.date = NULL,
-    scale.fill = NULL,
-    width.tree = 10,
-    width.bars = 1,
-    width.date = 5,
-    width.legend = 2,
-    height.tree = 2
+  object,
+  ...,
+  plot.tree = plot_tree(),
+  plot.bars = plot_bars(),
+  plot.calendar = plot_calendar(),
+  plot.epicurve = plot_epicurve(),
+  scale.date = NULL,
+  scale.fill = NULL,
+  width.tree = 10,
+  width.bars = 1,
+  width.date = 5,
+  width.legend = 2,
+  height.tree = 2
 ) {
   if (is.null(scale.date)) {
     scale.date <- ggplot2::scale_x_date(
@@ -96,7 +97,7 @@ autoplot.phylepic <- function(
     )
     guides <- c(guides, extract_guides(plot.calendar))
     relwidths <- c(relwidths, width.date)
-    pos.calendar <-length(hplotlist) + 1
+    pos.calendar <- length(hplotlist) + 1
     hplotlist[[pos.calendar]] <- plot.calendar
   }
 
@@ -155,7 +156,11 @@ autoplot.phylepic <- function(
     legends <- guides$assemble(theme)
     grDevices::dev.off()
 
-    cowplot::plot_grid(panel, legends$right, rel_widths = c(width.tree, width.legend))
+    cowplot::plot_grid(
+      panel,
+      legends$right,
+      rel_widths = c(width.tree, width.legend)
+    )
   }
 }
 

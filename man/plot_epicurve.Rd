@@ -25,8 +25,9 @@ more convenient to control this globally with the \code{"phylepic.week_start"}
 option, e.g. \code{options(phylepic.week_start = "Monday")}.}
 }
 \value{
-If \code{phylepic} is specified returns a ggplot, otherwise a function that
-when passed a "phylepic" object produces a ggplot for use with \code{\link[=plot.phylepic]{plot.phylepic()}}.
+If \code{phylepic} is specified returns a ggplot, otherwise a function
+that when passed a "phylepic" object produces a ggplot for use with
+\code{\link[=plot.phylepic]{plot.phylepic()}}.
 }
 \description{
 Plot epidemic curve panel

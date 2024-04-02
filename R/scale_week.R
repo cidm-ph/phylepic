@@ -9,14 +9,14 @@
 #' @return a ggplot scale object.
 #' @export
 scale_x_week <- function(
-    name = waiver(),
-    week_breaks = waiver(),
-    labels = waiver(),
-    date_labels = waiver(),
-    week_minor_breaks = waiver(),
-    oob = oob_infinite,
-    ...,
-    week_start = getOption("phylepic.week_start")
+  name = waiver(),
+  week_breaks = waiver(),
+  labels = waiver(),
+  date_labels = waiver(),
+  week_minor_breaks = waiver(),
+  oob = oob_infinite,
+  ...,
+  week_start = getOption("phylepic.week_start")
 ) {
   if (is.waive(week_breaks)) week_breaks <- 2L
   if (is.waive(week_minor_breaks)) week_minor_breaks <- 1L

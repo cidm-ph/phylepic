@@ -66,7 +66,8 @@ specified plots will look reasonable when assembled.
 In general, if you wish to suppress a panel from the plot, set the
 corresponding \verb{plot.*} argument to \code{NULL}. To customise it, use the
 corresponding \verb{plot_*()} function, which returns a ggplot plot. You can then
-add new layers or themes to that plot. See \code{vignette("phylepic")} for examples.
+add new layers or themes to that plot. See \code{vignette("phylepic")} for
+examples.
 
 Legends from all panels are collected and de-duplicated. They are drawn on
 the right edge of the overall plot.

@@ -13,12 +13,12 @@
 #' @family phylepic plots
 #' @export
 plot_calendar <- function(
-    phylepic,
-    fill = NULL,
-    weeks = TRUE,
-    week_start = getOption("phylepic.week_start"),
-    labels = NULL,
-    labels.params = list(size = 3, fontface = "bold", colour = "white")
+  phylepic,
+  fill = NULL,
+  weeks = TRUE,
+  week_start = getOption("phylepic.week_start"),
+  labels = NULL,
+  labels.params = list(size = 3, fontface = "bold", colour = "white")
 ) {
   wrapper <- function(x) {
     x <- as.data.frame(x)
@@ -26,7 +26,10 @@ plot_calendar <- function(
 
     mapping <- aes(fill = {{fill}})
 
-    p <- ggplot2::ggplot(x, aes(y = .data$.phylepic.index, x = .data$.phylepic.date))
+    p <- ggplot2::ggplot(x, aes(
+      y = .data$.phylepic.index,
+      x = .data$.phylepic.date
+    ))
 
     if (weeks) {
       if (!is.null(labels)) {

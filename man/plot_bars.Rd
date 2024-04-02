@@ -12,8 +12,9 @@ plot_bars(phylepic, ...)
 \item{...}{scale specifications.}
 }
 \value{
-If \code{phylepic} is specified returns a ggplot, otherwise a function that
-when passed a "phylepic" object produces a ggplot for use with \code{\link[=plot.phylepic]{plot.phylepic()}}.
+If \code{phylepic} is specified returns a ggplot, otherwise a function
+that when passed a "phylepic" object produces a ggplot for use with
+\code{\link[=plot.phylepic]{plot.phylepic()}}.
 }
 \description{
 This uses \code{\link[ggplot2:geom_tile]{ggplot2::geom_tile()}} to produce a grid with a row aligned with

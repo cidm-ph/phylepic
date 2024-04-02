@@ -50,7 +50,9 @@ warn_theme <- function(plot_theme, ..., .name) {
     val <- unname(settings[[i]])
     elem <- ggplot2::calc_element(key, plot_theme)
     if (!inherits(elem, class(val)[[1]])) {
-      cli::cli_inform("{.arg {name}} theme: overwriting {.arg {key}} to {.obj_type_friendly {val}}")
+      cli::cli_inform(
+        "{.arg {name}} theme: overwriting {.arg {key}} to {.obj_type_friendly {val}}"
+      )
     }
   }
 
@@ -78,7 +80,11 @@ merge_guides <- function(guides) {
   } else if (length(guides) == 1L) {
     guides[[1]]
   } else {
-    guides <- Reduce(concat_guides, x = guides[2:length(guides)], init = guides[[1]])
+    guides <- Reduce(
+      concat_guides,
+      x = guides[2:length(guides)],
+      init = guides[[1]]
+    )
     guides$merge()
     guides
   }
@@ -104,6 +110,6 @@ ggname <- function(prefix, grob) {
 
 aes_intersect <- function(aes1, aes2) {
   aes <- c(as.list(aes1), aes2[!names(aes2) %in% names(aes1)])
-  class(aes) <- 'uneval'
+  class(aes) <- "uneval"
   aes
 }

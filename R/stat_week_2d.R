@@ -14,22 +14,22 @@
 #' @return ggplot2 stat layer.
 #' @export
 stat_week_2d <- function(
-    mapping = NULL,
-    data = NULL,
-    geom = "tile",
-    position = "identity",
-    ...,
-    bins.y = NULL,
-    binwidth.y = NULL,
-    breaks.y = NULL,
-    center.y = NULL,
-    boundary.y = NULL,
-    closed.y = c("left", "right"),
-    drop = TRUE,
-    week_start = getOption("phylepic.week_start"),
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
+  mapping = NULL,
+  data = NULL,
+  geom = "tile",
+  position = "identity",
+  ...,
+  bins.y = NULL,
+  binwidth.y = NULL,
+  breaks.y = NULL,
+  center.y = NULL,
+  boundary.y = NULL,
+  closed.y = c("left", "right"),
+  drop = TRUE,
+  week_start = getOption("phylepic.week_start"),
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
 ) {
   ggplot2::layer(
     data = data,
@@ -130,7 +130,7 @@ StatWeek2d <- ggplot2::ggproto("StatWeek2d", ggplot2::Stat,
 bin_vector2d <- function(x, y, bins.x, bins.y, weight = NULL, drop = TRUE) {
   stopifnot(is_bins(bins.x), is_bins(bins.y))
 
-  if (all(is.na(x)) | all(is.na(y))) {
+  if (all(is.na(x)) || all(is.na(y))) {
     return(bin2d_out(
       length(x),
       x = NA, width = NA, xmin = NA, xmax = NA,
@@ -229,8 +229,8 @@ bin2d_out <- function(
 }
 
 make_bins <- function(
-    x, scale, breaks = NULL, binwidth = NULL, bins = NULL, center = NULL,
-    boundary = NULL, closed = c("right", "left")
+  x, scale, breaks = NULL, binwidth = NULL, bins = NULL, center = NULL,
+  boundary = NULL, closed = c("right", "left")
 ) {
   if (!is.null(breaks)) {
     if (!scale$is_discrete()) {

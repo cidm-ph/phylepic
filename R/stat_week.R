@@ -11,16 +11,16 @@
 #' @return ggplot2 stat layer.
 #' @export
 stat_week <- function(
-    mapping = NULL,
-    data = NULL,
-    geom = "bar",
-    position = "stack",
-    ...,
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE,
-    week_start = getOption("phylepic.week_start"),
-    pad = FALSE
+  mapping = NULL,
+  data = NULL,
+  geom = "bar",
+  position = "stack",
+  ...,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  week_start = getOption("phylepic.week_start"),
+  pad = FALSE
 ) {
   ggplot2::layer(
     stat = StatWeek,

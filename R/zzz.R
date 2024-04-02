@@ -1,4 +1,4 @@
-.onLoad <- function(...){
+.onLoad <- function(...) {
   ggplot2::register_theme_elements(
     phylepic.grid.bar = ggplot2::element_rect(fill = "#eefaff"),
     phylepic.grid.line = ggplot2::element_line(linetype = 3),

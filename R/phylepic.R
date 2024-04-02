@@ -18,7 +18,9 @@
 #' library(ape)
 #'
 #' tree <- read.tree(system.file("enteric.newick", package = "phylepic"))
-#' metadata <- read.csv(system.file("enteric_metadata.csv", package = "phylepic"))
+#' metadata <- read.csv(
+#'   system.file("enteric_metadata.csv", package = "phylepic")
+#' )
 #' phylepic(tree, metadata, name, as.Date(collection_date))
 phylepic <- function(tree, metadata, name, date) {
   if (!inherits(tree, get_s3_classes(tidygraph::as_tbl_graph))) {
@@ -101,9 +103,13 @@ as_tbl_graph.phylepic <- function(x, ...) {
 
 salvage_node_labels <- function(tree, tbl_graph) {
   if (!is.null(attr(tree, "node.label.orig"))) {
-    node_idx <- match(as.data.frame(tbl_graph, active = "nodes")$name, tree$node.label)
+    node_idx <- match(
+      as.data.frame(tbl_graph, active = "nodes")$name,
+      tree$node.label
+    )
     orig_labels <- attr(tree, "node.label.orig")[node_idx]
-    tbl_graph <- dplyr::mutate(tbl_graph, node.label.orig = as.character(orig_labels))
+    tbl_graph <- tbl_graph |>
+      dplyr::mutate(node.label.orig = as.character(orig_labels))
   }
   tbl_graph
 }
@@ -113,7 +119,11 @@ guess_bootstrap <- function(ggraph_layout) {
   if (!"node.label.orig" %in% colnames(ggraph_layout)) source_col <- "name"
   values <- ggraph_layout[[source_col]][!ggraph_layout$leaf]
   if (all(grepl("^[0-9.]+/[0-9.]+$", values) | values == "")) {
-    bootstrap <- ifelse(ggraph_layout$leaf, NA_character_, ggraph_layout[[source_col]])
+    bootstrap <- ifelse(
+      ggraph_layout$leaf,
+      NA_character_,
+      ggraph_layout[[source_col]]
+    )
     bootstrap_numeric <- bootstrap |>
       strsplit("/") |>
       lapply(FUN = as.numeric) |>
@@ -191,7 +201,7 @@ get_s3_classes <- function(f) {
 }
 
 deduplicate_nodes <- function(tree) {
-  if (inherits(tree, "phylo") & any(duplicated(tree$node.label))) {
+  if (inherits(tree, "phylo") && any(duplicated(tree$node.label))) {
     orig_labels <- tree$node.label
     tree$node.label <- sprintf("node%05d", seq_along(tree$node.label))
     attr(tree, "node.label.orig") <- orig_labels

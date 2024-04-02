@@ -1,9 +1,9 @@
 #' Drop a clade from a phylogentic tree
 #'
-#' `drop.clade` invokes [ape::drop.tip()] on all tips descendent from the specified
-#' node. This is convenient when used alongside [ape::getMRCA()] to drop a clade
-#' defined by the most recent common ancestor of a set of tips, rather than
-#' exhaustively specifying all of its tips.
+#' `drop.clade` invokes [ape::drop.tip()] on all tips descendent from the
+#' specified node. This is convenient when used alongside [ape::getMRCA()] to
+#' drop a clade defined by the most recent common ancestor of a set of tips,
+#' rather than exhaustively specifying all of its tips.
 #'
 #' @param phy an object of class "phylo".
 #' @param node number specifying the parent node of the clade to delete.

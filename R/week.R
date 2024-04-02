@@ -15,7 +15,7 @@ as_week_start <- function(week_start) {
     cli::cli_abort("{.arg week_start} must be a single value, not a vector.")
   } else if (is.numeric(week_start)) {
     as.integer(week_start %% 7L)
-  } else if (is.character(week_start) & tolower(week_start) %in% names(.weekdays)) {
+  } else if (is.character(week_start) && (tolower(week_start) %in% names(.weekdays))) {
     unname(.weekdays[tolower(week_start)])
   } else {
     cli::cli_abort(c(
@@ -37,13 +37,19 @@ as_week_start <- function(week_start) {
 #'
 #' @return A break function suitable for use in [ggplot2::scale_x_date()] et al.
 #' @export
-week_breaks <- function(width = 1L, week_start = getOption("phylepic.week_start")) {
+week_breaks <- function(
+  width = 1L,
+  week_start = getOption("phylepic.week_start")
+) {
   week_start <- as_week_start(week_start)
-  function (x) week_span(x, width, week_start)
+  function(x) week_span(x, width, week_start)
 }
 
-week_span <- function (x_range, width, week_start) {
-  x_range <- date_to_week(c(floor_week(x_range[1]), ceiling_week(x_range[2])), week_start)
+week_span <- function(x_range, width, week_start) {
+  x_range <- date_to_week(
+    c(floor_week(x_range[1]), ceiling_week(x_range[2])),
+    week_start
+  )
   seq(x_range[1], x_range[2], by = paste0(width, " week"))
 }
 

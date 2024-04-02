@@ -38,10 +38,16 @@ plot_bars <- function(phylepic, ...) {
       p <- p + scales[[i]]
 
       m <- aes(y = .data$.phylepic.index)
-      m$x <- if (is.waive(scales[[i]]$name)) { name } else { scales[[i]]$name }
+      m$x <- if (is.waive(scales[[i]]$name)) name else scales[[i]]$name
       m$fill <- rlang::parse_quo(name, env = rlang::global_env())
-      m$colour <- rlang::quo(dplyr::if_else(is.na(.data[[name]]), I(NA_character_), I("grey30")))
-      p <- p + ggplot2::geom_tile(mapping = m, width = 1, height = 1, linewidth = 0.3)
+      m$colour <- rlang::quo(dplyr::if_else(
+        is.na(.data[[name]]),
+        I(NA_character_),
+        I("grey30")
+      ))
+      p <- p + ggplot2::geom_tile(
+        mapping = m, width = 1, height = 1, linewidth = 0.3
+      )
     }
 
     p +

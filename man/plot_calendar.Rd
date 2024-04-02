@@ -33,8 +33,9 @@ If a character scalar, controls the date format (see \code{\link[=strptime]{strp
 \item{labels.params}{Passed to \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}} if \code{labels} are drawn.}
 }
 \value{
-If \code{phylepic} is specified returns a ggplot, otherwise a function that
-when passed a "phylepic" object produces a ggplot for use with \code{\link[=plot.phylepic]{plot.phylepic()}}.
+If \code{phylepic} is specified returns a ggplot, otherwise a function
+that when passed a "phylepic" object produces a ggplot for use with
+\code{\link[=plot.phylepic]{plot.phylepic()}}.
 }
 \description{
 Plot calendar panel

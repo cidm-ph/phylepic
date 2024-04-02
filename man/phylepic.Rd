@@ -30,6 +30,8 @@ that do not appear in the data dropped.
 library(ape)
 
 tree <- read.tree(system.file("enteric.newick", package = "phylepic"))
-metadata <- read.csv(system.file("enteric_metadata.csv", package = "phylepic"))
+metadata <- read.csv(
+  system.file("enteric_metadata.csv", package = "phylepic")
+)
 phylepic(tree, metadata, name, as.Date(collection_date))
 }

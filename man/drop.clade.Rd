@@ -17,10 +17,10 @@ drop.clade(phy, node, root.edge = 0, collapse.singles = TRUE)
 New phylo object with the chosen clade removed
 }
 \description{
-\code{drop.clade} invokes \code{\link[ape:drop.tip]{ape::drop.tip()}} on all tips descendent from the specified
-node. This is convenient when used alongside \code{\link[ape:mrca]{ape::getMRCA()}} to drop a clade
-defined by the most recent common ancestor of a set of tips, rather than
-exhaustively specifying all of its tips.
+\code{drop.clade} invokes \code{\link[ape:drop.tip]{ape::drop.tip()}} on all tips descendent from the
+specified node. This is convenient when used alongside \code{\link[ape:mrca]{ape::getMRCA()}} to
+drop a clade defined by the most recent common ancestor of a set of tips,
+rather than exhaustively specifying all of its tips.
 }
 \examples{
 library("ape")

@@ -11,6 +11,7 @@ A collection of utilities and ggplot extensions to assist with visualisations in
 Useful links:
 \itemize{
   \item \url{https://github.com/cidm-ph/phylepic}
+  \item \url{https://cidm-ph.github.io/phylepic/}
   \item Report bugs at \url{https://github.com/cidm-ph/phylepic/issues}
 }
 

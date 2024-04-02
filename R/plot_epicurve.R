@@ -9,10 +9,10 @@
 #' @family phylepic plots
 #' @export
 plot_epicurve <- function(
-    phylepic,
-    fill = NULL,
-    weeks = TRUE,
-    week_start = getOption("phylepic.week_start")
+  phylepic,
+  fill = NULL,
+  weeks = TRUE,
+  week_start = getOption("phylepic.week_start")
 ) {
   wrapper <- function(x) {
     x <- as.data.frame(x)
@@ -21,16 +21,22 @@ plot_epicurve <- function(
     p <- ggplot2::ggplot(x)
 
     if (weeks) {
-      p <- p + stat_week(aes(x = .data$.phylepic.date, fill = {{fill}}), week_start = week_start)
+      p <- p + stat_week(
+        aes(x = .data$.phylepic.date, fill = {{fill}}),
+        week_start = week_start
+      )
     } else {
-      p <- p + ggplot2::geom_histogram(aes(x = .data$.phylepic.date, fill = {{fill}}), binwidth = 1)
+      p <- p + ggplot2::geom_histogram(
+        aes(x = .data$.phylepic.date, fill = {{fill}}),
+        binwidth = 1
+      )
     }
 
     p +
-    ggplot2::theme_minimal() +
-    ggplot2::scale_y_continuous(position = "right") +
-    ggplot2::labs(x = NULL, y = NULL) +
-    theme_plot_epicurve()
+      ggplot2::theme_minimal() +
+      ggplot2::scale_y_continuous(position = "right") +
+      ggplot2::labs(x = NULL, y = NULL) +
+      theme_plot_epicurve()
   }
 
   if (missing(phylepic)) wrapper else wrapper(phylepic)
@@ -58,7 +64,9 @@ conform_plot_epicurve <- function(plot, scale.date, scale.fill) {
   }
 
   if (! inherits(plot$scales$get_scales("x"), "ScaleContinuousDate")) {
-    cli::cli_abort(c("x" = "{.arg plot.calendar} does not have a date scale for {.field x}"))
+    cli::cli_abort(c(
+      "x" = "{.arg plot.calendar} does not have a date scale for {.field x}"
+    ))
   }
 
   plot + ggplot2::theme(legend.position = "none")
