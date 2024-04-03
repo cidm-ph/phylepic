@@ -194,7 +194,7 @@ get_s3_classes <- function(f) {
     deparse(path)
   }
 
-  methods_info <- utils::.S3methods(name, envir = env, dropPath = TRUE)
+  methods_info <- utils::.S3methods(name, envir = env)
   methods_info <- attr(methods_info, "info")
   methods <- rownames(methods_info)
   substr(methods, nchar(name) + 2, nchar(methods))
