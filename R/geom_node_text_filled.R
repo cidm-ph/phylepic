@@ -47,11 +47,12 @@ GeomTextFilled <- ggplot2::ggproto("GeomTextFilled", ggplot2::GeomText,
     if (length(grob$y) < 2) {
       stop("Need at least 2 rows in text dataset for GeomTextFilled")
     }
-    height_full <- grid::convertHeight(grob$y[[2]] - grob$y[[1]], "native")
 
     widths <- map_unit(grob$label, ~ unit(1, "strwidth", data = .x))
-    right <- map2_unit(grob$x, widths, `+`)
+    right <- map2_unit(grob$x, widths * 0.75, `+`)
     order <- order(grid::convertY(grob$y, "native", valueOnly = TRUE))
+
+    height_full <- grid::convertHeight(grob$y[order][[2]] - grob$y[order][[1]], "native")
 
     bg_grob <- grid::polygonGrob(
       x = grid::unit.c(

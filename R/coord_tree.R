@@ -40,7 +40,7 @@ CoordTree <- ggplot2::ggproto("CoordTree", ggplot2::CoordCartesian,
     stripe_freq <- ggplot2::calc_element("phylepic.grid.every.bar", theme)
     stripes_y <- seq(
       panel_params$y.range[[1]],
-      panel_params$y.range[[2]],
+      panel_params$y.range[[2]] - 1,
       by = stripe_freq
     )
     stripes_y <- panel_params$y$rescale(ceiling(stripes_y))
@@ -48,7 +48,7 @@ CoordTree <- ggplot2::ggproto("CoordTree", ggplot2::CoordCartesian,
     line_freq <- ggplot2::calc_element("phylepic.grid.every.line", theme)
     lines_y <- seq(
       panel_params$y.range[[1]],
-      panel_params$y.range[[2]],
+      panel_params$y.range[[2]] - 1,
       by = line_freq
     )
     lines_y <- panel_params$y$rescale(ceiling(lines_y))
