@@ -1,9 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   phylepic: phylepic.html
-last_built: 2024-04-04T04:50Z
+last_built: 2024-05-13T04:32Z
 urls:
   reference: https://cidm-ph.github.io/phylepic/reference
   article: https://cidm-ph.github.io/phylepic/articles
