@@ -38,11 +38,11 @@
 #' )
 #' phylepic(tree, metadata, name, as.Date(collection_date))
 phylepic <- function(
-    tree,
-    metadata,
-    name,
-    date,
-    unmatched_tips = c("error", "drop", "keep")
+  tree,
+  metadata,
+  name,
+  date,
+  unmatched_tips = c("error", "drop", "keep")
 ) {
   if (!inherits(tree, get_s3_classes(tidygraph::as_tbl_graph))) {
     cli::cli_abort(c(
@@ -115,7 +115,6 @@ subtree <- function(tree, tip) {
   tree <- deduplicate_nodes(tree)
   tbl_graph <- as_tbl_graph(tree, directed = TRUE)
   tbl_graph <- salvage_node_labels(tree, tbl_graph)
-  tbl_graph <- tidygraph::activate(tbl_graph, "nodes")
 
   repeat {
     retain <- union(
@@ -123,10 +122,10 @@ subtree <- function(tree, tip) {
       which(!is_leaf(tbl_graph))
     )
     if (length(retain) == igraph::vcount(tbl_graph)) break
-    tbl_graph <- igraph::induced_subgraph(tbl_graph, retain, impl = "copy_and_delete")
+    tbl_graph <- igraph::induced_subgraph(tbl_graph, retain)
   }
 
-  as_tbl_graph(tbl_graph)
+  as_tbl_graph(tbl_graph, directed = TRUE)
 }
 
 is_leaf <- function(graph) {
@@ -141,8 +140,8 @@ is_leaf <- function(graph) {
 
 minimal_tip_data_frame <- function(tree) {
   create_tree_layout(tree) |>
-  dplyr::filter(.data$leaf) |>
-  dplyr::transmute(.phylepic.index = .data$y, .phylepic.name = .data$name)
+    dplyr::filter(.data$leaf) |>
+    dplyr::transmute(.phylepic.index = .data$y, .phylepic.name = .data$name)
 }
 
 is.phylepic <- function(x) {
@@ -166,13 +165,9 @@ as.phylo.phylepic <- function(x, ...) {
 
 #' @importFrom tidygraph as_tbl_graph
 #' @export
-as_tbl_graph.phylepic <- function(x, directed = TRUE, ...) {
-  if (!isTRUE(directed)) {
-    cli::cli_warn("{.arg directed} must be {TRUE}")
-  }
-
+as_tbl_graph.phylepic <- function(x, ...) {
   tree <- deduplicate_nodes(x$tree)
-  tbl_graph <- as_tbl_graph(tree, directed = TRUE, ...)
+  tbl_graph <- as_tbl_graph(tree, ...)
   salvage_node_labels(tree, tbl_graph)
 }
 
