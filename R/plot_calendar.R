@@ -82,10 +82,12 @@ theme_plot_calendar <- function() {
     axis.ticks.y = ggplot2::element_blank(),
     axis.text.y = ggplot2::element_blank(),
     panel.background = ggplot2::element_blank(),
-    panel.grid = ggplot2::element_blank(),
+    panel.grid = ggplot2::element_line(colour = "grey70"),
+    panel.grid.minor.x = ggplot2::element_line(linewidth = rel(0.5)),
+    panel.grid.major.y = ggplot2::element_blank(),
+    panel.grid.minor.y = ggplot2::element_blank(),
     panel.border = ggplot2::element_rect(fill = NA),
     plot.margin = ggplot2::margin(l = 0, r = 0),
-    panel.grid.major.x = ggplot2::element_line(colour = "#aaaaaa"),
   )
 }
 
