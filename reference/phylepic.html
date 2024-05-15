@@ -57,7 +57,13 @@ that do not appear in the data dropped.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">phylepic</span><span class="op">(</span><span class="va">tree</span>, <span class="va">metadata</span>, <span class="va">name</span>, <span class="va">date</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">phylepic</span><span class="op">(</span></span>
+<span>  <span class="va">tree</span>,</span>
+<span>  <span class="va">metadata</span>,</span>
+<span>  <span class="va">name</span>,</span>
+<span>  <span class="va">date</span>,</span>
+<span>  unmatched_tips <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"error"</span>, <span class="st">"drop"</span>, <span class="st">"keep"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,12 +86,31 @@ that do not appear in the data dropped.</p>
 <dd><p>Column in <code>metadata</code> that contains the date data (class "Date")
 for the tips (tidy-eval).</p></dd>
 
+
+<dt>unmatched_tips</dt>
+<dd><p>Action to take when <code>tree</code> contains tip labels that
+do not appear in <code>name</code>. <code>"error"</code> aborts with an error message, <code>"drop"</code>
+drops unmatched tips from <code>tree</code>, <code>"keep"</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
 <p>An object of class "phylepic".</p>
+    </div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>To reduce surprises when matching <code>metadata</code> and <code>tree</code>, by default an error
+occurs when there are tree tips that do not have associated metadata. On the
+other hand, it it expected that <code>metadata</code> might contain rows that do not
+correspond to the tips in <code>tree</code>.</p>
+<p>This often means that <code>factor</code> columns from <code>metadata</code> will contain levels
+that do not appear at all in the tree. For plotting,
+<code><a href="https://ggplot2.tidyverse.org/reference/discrete_scale.html" class="external-link">ggplot2::discrete_scale</a></code> normally solves this with <code>drop = TRUE</code>, however
+this can lead to inconsistencies when sharing the same scale across multiple
+phylepic panels. <code>phylepic()</code> drops unused levels in all factors so that
+scales can use <code>drop = FALSE</code> for consistency.</p>
     </div>
 
     <div class="section level2">
