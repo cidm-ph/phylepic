@@ -49,7 +49,7 @@ plot_calendar <- function(
       )
     } else {
       if (!is.null(labels)) {
-        mapping2 <- aes(label = format(x, labels))
+        mapping2 <- aes(label = format(ggplot2::after_stat(x), labels))
         mapping$label <- mapping2$label
       }
 
