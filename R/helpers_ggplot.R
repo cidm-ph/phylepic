@@ -85,7 +85,21 @@ merge_guides <- function(guides) {
       x = guides[2:length(guides)],
       init = guides[[1]]
     )
-    guides$merge()
+    withCallingHandlers(
+      guides$merge(),
+      message = function(cnd) {
+        if (inherits(cnd, "rlib_message_name_repair")) {
+          # these are un-actionable messages due to scale names clashing
+          invokeRestart("muffleMessage")
+        }
+      },
+      warning = function(cnd) {
+        if (inherits(cnd, "rlang_warning") && grepl("Duplicated `override.aes`", cnd$message)) {
+          # these are raised already when constructing the individual panels
+          invokeRestart("muffleWarning")
+        }
+      }
+    )
     guides
   }
 }
