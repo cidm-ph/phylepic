@@ -1,10 +1,10 @@
 #' Plot phylogenetic tree panel
 #'
-#' The tree is drawn using {ggraph} with its dendrogram layout. When
+#' The tree is drawn using `ggraph` with its dendrogram layout. When
 #' customising it, you may wish to add layers such as
 #' [ggraph::geom_node_point()].
 #' The metadata table is joined onto the tree, so all its column names are
-#' available for use in the various {ggraph} geoms.
+#' available for use in the various `ggraph` geoms.
 #'
 #' @param phylepic object of class "phylepic".
 #' @param label variable in metadata table corresponding to the tip labels (tidy-eval).

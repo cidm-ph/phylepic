@@ -24,11 +24,11 @@ that when passed a "phylepic" object produces a ggplot for use with
 \code{\link[=plot.phylepic]{plot.phylepic()}}.
 }
 \description{
-The tree is drawn using {ggraph} with its dendrogram layout. When
+The tree is drawn using \code{ggraph} with its dendrogram layout. When
 customising it, you may wish to add layers such as
 \code{\link[ggraph:geom_node_point]{ggraph::geom_node_point()}}.
 The metadata table is joined onto the tree, so all its column names are
-available for use in the various {ggraph} geoms.
+available for use in the various \code{ggraph} geoms.
 }
 \seealso{
 Other phylepic plots: 
