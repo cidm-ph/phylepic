@@ -42,6 +42,7 @@ geom_node_text_filled <- function(
 #' @rdname geom_node_text_filled
 GeomTextFilled <- ggplot2::ggproto("GeomTextFilled", ggplot2::GeomText,
   required_aes = c("x", "y"),
+  optional_aes = c("label"),
 
   draw_panel = function(data, panel_params, coord, ...) {
     data$label[is.na(data$label)] <- ""
