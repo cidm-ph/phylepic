@@ -41,7 +41,10 @@ geom_node_text_filled <- function(
 #' @format NULL
 #' @rdname geom_node_text_filled
 GeomTextFilled <- ggplot2::ggproto("GeomTextFilled", ggplot2::GeomText,
+  required_aes = c("x", "y"),
+
   draw_panel = function(data, panel_params, coord, ...) {
+    data$label[is.na(data$label)] <- ""
     grob <- ggplot2::GeomText$draw_panel(data, panel_params, coord, ...)
 
     if (length(grob$y) < 2) {
