@@ -76,6 +76,7 @@ plot_calendar <- function(
   if (missing(phylepic)) wrapper else wrapper(phylepic)
 }
 
+#' @importFrom ggplot2 rel
 theme_plot_calendar <- function() {
   ggplot2::theme(
     axis.title.y = ggplot2::element_blank(),
