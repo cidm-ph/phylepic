@@ -4,7 +4,13 @@
 \alias{phylepic}
 \title{Combine metadata (a line list) with a phylogenetic tree}
 \usage{
-phylepic(tree, metadata, name, date)
+phylepic(
+  tree,
+  metadata,
+  name,
+  date,
+  unmatched_tips = c("error", "drop", "keep")
+)
 }
 \arguments{
 \item{tree}{An object convertible to a \code{tbl_graph}. This will usually be a
@@ -17,6 +23,10 @@ phylepic(tree, metadata, name, date)
 
 \item{date}{Column in \code{metadata} that contains the date data (class "Date")
 for the tips (tidy-eval).}
+
+\item{unmatched_tips}{Action to take when \code{tree} contains tip labels that
+do not appear in \code{name}. \code{"error"} aborts with an error message, \code{"drop"}
+drops unmatched tips from \code{tree}, \code{"keep"}.}
 }
 \value{
 An object of class "phylepic".
@@ -25,6 +35,19 @@ An object of class "phylepic".
 Some checks are performed to catch issues where the metadata and tree tips
 don't match up. Any columns in \code{metadata} that are factors have all levels
 that do not appear in the data dropped.
+}
+\details{
+To reduce surprises when matching \code{metadata} and \code{tree}, by default an error
+occurs when there are tree tips that do not have associated metadata. On the
+other hand, it it expected that \code{metadata} might contain rows that do not
+correspond to the tips in \code{tree}.
+
+This often means that \code{factor} columns from \code{metadata} will contain levels
+that do not appear at all in the tree. For plotting,
+\code{ggplot2::discrete_scale} normally solves this with \code{drop = TRUE}, however
+this can lead to inconsistencies when sharing the same scale across multiple
+phylepic panels. \code{phylepic()} drops unused levels in all factors so that
+scales can use \code{drop = FALSE} for consistency.
 }
 \examples{
 library(ape)

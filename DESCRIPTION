@@ -32,6 +32,7 @@ Imports:
     ggnewscale,
     ggplot2 (>= 3.5.0),
     ggraph,
+    igraph,
     rlang,
     scales,
     tidygraph,

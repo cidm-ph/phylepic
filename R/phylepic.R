@@ -4,6 +4,18 @@
 #' don't match up. Any columns in `metadata` that are factors have all levels
 #' that do not appear in the data dropped.
 #'
+#' To reduce surprises when matching `metadata` and `tree`, by default an error
+#' occurs when there are tree tips that do not have associated metadata. On the
+#' other hand, it it expected that `metadata` might contain rows that do not
+#' correspond to the tips in `tree`.
+#'
+#' This often means that `factor` columns from `metadata` will contain levels
+#' that do not appear at all in the tree. For plotting,
+#' `ggplot2::discrete_scale` normally solves this with `drop = TRUE`, however
+#' this can lead to inconsistencies when sharing the same scale across multiple
+#' phylepic panels. `phylepic()` drops unused levels in all factors so that
+#' scales can use `drop = FALSE` for consistency.
+#'
 #' @param tree An object convertible to a `tbl_graph`. This will usually be a
 #'   "phylo" object, but see [tidygraph::tbl_graph] for more details.
 #' @param metadata A data frame.
@@ -11,6 +23,9 @@
 #'   (tidy-eval).
 #' @param date Column in `metadata` that contains the date data (class "Date")
 #'   for the tips (tidy-eval).
+#' @param unmatched_tips Action to take when `tree` contains tip labels that
+#'   do not appear in `name`. `"error"` aborts with an error message, `"drop"`
+#'   drops unmatched tips from `tree`, `"keep"`.
 #'
 #' @return An object of class "phylepic".
 #' @export
@@ -22,7 +37,13 @@
 #'   system.file("enteric_metadata.csv", package = "phylepic")
 #' )
 #' phylepic(tree, metadata, name, as.Date(collection_date))
-phylepic <- function(tree, metadata, name, date) {
+phylepic <- function(
+    tree,
+    metadata,
+    name,
+    date,
+    unmatched_tips = c("error", "drop", "keep")
+) {
   if (!inherits(tree, get_s3_classes(tidygraph::as_tbl_graph))) {
     cli::cli_abort(c(
       "x" = "{.arg tree} must be convertible to a {.code tidygraph::tbl_graph}",
@@ -33,27 +54,43 @@ phylepic <- function(tree, metadata, name, date) {
   if (missing(name)) cli::cli_abort("{.arg name} is mandatory")
   if (missing(date)) cli::cli_abort("{.arg date} is mandatory")
 
-  tips <-
-    create_tree_layout(tree) |>
-    dplyr::filter(.data$leaf) |>
-    dplyr::transmute(.phylepic.index = .data$y, .phylepic.name = .data$name)
+  tips <- minimal_tip_data_frame(tree)
 
   tip_data <- dplyr::mutate(metadata, .phylepic.name = {{name}})
   if (!is.character(tip_data$.phylepic.name)) {
     cli::cli_abort(c(
       "!" = "The {.arg name} provided does not evaluate to a character vector",
-      "x" = "In the metadata frame, {.code {rlang::as_label(rlang::enquo(name))}} has class {.cls {class(tip_data$.phylepic.name)}}"
+      "x" = "In {.arg metadata}, {.code {rlang::as_label(rlang::enquo(name))}} has class {.cls {class(tip_data$.phylepic.name)}}"
     ))
   }
 
+  extra_tips <- setdiff(tips$.phylepic.name, tip_data$.phylepic.name)
+  if (length(extra_tips) > 0) {
+    unmatched_tips <- match.arg(unmatched_tips)
+    if (unmatched_tips == "error") {
+      cli::cli_abort(c(
+        "!" = "{.arg tree} contains tips that do not appear in {.arg metadata}",
+        "x" = "Unmatched tips: {extra_tips}",
+        "i" = 'To drop these tips from the tree, use {.code unmatched_tips = "drop"}'
+      ))
+    } else if (unmatched_tips == "drop") {
+      tree <- subtree(tree, intersect(tips$.phylepic.name, tip_data$.phylepic.name))
+      n_dropped <- nrow(tips) - sum(is_leaf(tree))
+      tips <- minimal_tip_data_frame(tree)
+      cli::cli_inform("Dropped {n_dropped} unmatched tips from tree, as requested")
+    } else if (unmatched_tips == "keep") {
+      # nothing to do
+    }
+  }
+
   tip_data <- tip_data |>
-    dplyr::right_join(tips, by = ".phylepic.name") |>
+    dplyr::right_join(tips, by = ".phylepic.name", relationship = "one-to-one") |>
     dplyr::mutate(.phylepic.date = {{date}})
 
   if (!inherits(tip_data$.phylepic.date, "Date")) {
     cli::cli_abort(c(
       "!" = "The {.arg date} provided does not evaluate to a Date vector",
-      "x" = "In the metadata frame, {.code {rlang::as_label(rlang::enquo(date))}} has class {.cls {class(tip_data$.phylepic.date)}}"
+      "x" = "In {.arg metadata}, {.code {rlang::as_label(rlang::enquo(date))}} has class {.cls {class(tip_data$.phylepic.date)}}"
     ))
   }
 
@@ -72,6 +109,40 @@ phylepic <- function(tree, metadata, name, date) {
     ),
     class = "phylepic"
   )
+}
+
+subtree <- function(tree, tip) {
+  tree <- deduplicate_nodes(tree)
+  tbl_graph <- as_tbl_graph(tree, directed = TRUE)
+  tbl_graph <- salvage_node_labels(tree, tbl_graph)
+  tbl_graph <- tidygraph::activate(tbl_graph, "nodes")
+
+  repeat {
+    retain <- union(
+      match(tip, igraph::V(tbl_graph)$name),
+      which(!is_leaf(tbl_graph))
+    )
+    if (length(retain) == igraph::vcount(tbl_graph)) break
+    tbl_graph <- igraph::induced_subgraph(tbl_graph, retain, impl = "copy_and_delete")
+  }
+
+  as_tbl_graph(tbl_graph)
+}
+
+is_leaf <- function(graph) {
+  if (igraph::is_directed(graph)) {
+    deg_in <- igraph::degree(graph, mode = "in") == 0
+    deg_out <- igraph::degree(graph, mode = "out") == 0
+    if (sum(deg_out) > sum(deg_in)) deg_out else deg_in
+  } else {
+    igraph::degree(graph, mode = "all") == 1
+  }
+}
+
+minimal_tip_data_frame <- function(tree) {
+  create_tree_layout(tree) |>
+  dplyr::filter(.data$leaf) |>
+  dplyr::transmute(.phylepic.index = .data$y, .phylepic.name = .data$name)
 }
 
 is.phylepic <- function(x) {
@@ -95,9 +166,13 @@ as.phylo.phylepic <- function(x, ...) {
 
 #' @importFrom tidygraph as_tbl_graph
 #' @export
-as_tbl_graph.phylepic <- function(x, ...) {
+as_tbl_graph.phylepic <- function(x, directed = TRUE, ...) {
+  if (!isTRUE(directed)) {
+    cli::cli_warn("{.arg directed} must be {TRUE}")
+  }
+
   tree <- deduplicate_nodes(x$tree)
-  tbl_graph <- as_tbl_graph(tree, ...)
+  tbl_graph <- as_tbl_graph(tree, directed = TRUE, ...)
   salvage_node_labels(tree, tbl_graph)
 }
 
