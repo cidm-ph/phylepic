@@ -71,7 +71,7 @@ phylepic <- function(
       cli::cli_abort(c(
         "!" = "{.arg tree} contains tips that do not appear in {.arg metadata}",
         "x" = "Unmatched tips: {extra_tips}",
-        "i" = 'To drop these tips from the tree, use {.code unmatched_tips = "drop"}'
+        "i" = 'To fix this, try {.code unmatched_tips = "drop"} or {.code unmatched_tips = "keep"}'
       ))
     } else if (unmatched_tips == "drop") {
       tree <- subtree(tree, intersect(tips$.phylepic.name, tip_data$.phylepic.name))
