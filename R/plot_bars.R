@@ -19,7 +19,13 @@ plot_bars <- function(phylepic, ...) {
     scales <- rlang::list2(...)
     if (length(scales) == 0) scales <- guess_scales(x)
 
-    p <- ggplot2::ggplot(x)
+    p <-
+      ggplot2::ggplot(x) +
+      ggplot2::scale_x_discrete() +
+      ggplot2::scale_y_continuous(
+        breaks = NULL,
+        expand = ggplot2::expansion(add = 0)
+      )
 
     for (i in seq_len(length(scales))) {
       name <- names(scales)[[i]]
@@ -31,15 +37,19 @@ plot_bars <- function(phylepic, ...) {
         ))
       }
 
-      if (i > 1) {
-        p <- p + ggnewscale::new_scale_fill()
+      if (!any(ggplot2::standardise_aes_names(scales[[i]]$aesthetics) %in% c("fill", "colour"))) {
+        cli::cli_warn(
+          "Scale provided for bar {name} is not a colour scale, but is defined for {scales[[i]]$aesthetics}"
+        )
       }
+      scales[[i]]$aesthetics <- "fill"
 
+      if (i > 1) p <- p + ggnewscale::new_scale_fill()
       p <- p + scales[[i]]
 
       m <- aes(y = .data$.phylepic.index)
       m$x <- if (is.waive(scales[[i]]$name)) name else scales[[i]]$name
-      m$fill <- rlang::parse_quo(name, env = rlang::global_env())
+      m$fill <- rlang::sym(name)
       m$colour <- rlang::quo(dplyr::if_else(
         is.na(.data[[name]]),
         I(NA_character_),
@@ -51,10 +61,6 @@ plot_bars <- function(phylepic, ...) {
     }
 
     p +
-      ggplot2::scale_y_continuous(
-        breaks = NULL,
-        expand = ggplot2::expansion(add = 0)
-      ) +
       theme_plot_bars() +
       coord_tree()
   }
@@ -80,7 +86,7 @@ guess_scales <- function(data) {
     scale_name <- colnames(factors)[i]
     guess[[scale_name]] <- ggplot2::scale_fill_brewer(
       type = "qual",
-      palette = i,
+      palette = (i - 1L) %% 8L + 1L,
       drop = FALSE,
       na.translate = FALSE,
     )
