@@ -40,14 +40,15 @@ plot_tree <- function(phylepic, label = .data$name, bootstrap = TRUE) {
 
     if (bootstrap && (".phylepic.bootstrap_numeric" %in% colnames(tr_layout))) {
       p <- p + ggraph::geom_edge_elbow(
-        aes(
-          filter = (
-            (!.data$node2.leaf) &
-              (length >= 0.05 * max(length)) &
+        aes(label = round(.data$node2..phylepic.bootstrap_numeric, digits = 0)),
+        data = function(layout) {
+          ggraph::get_edges()(layout) |>
+            dplyr::filter(
+              (!.data$node2.leaf),
+              (length >= 0.05 * max(length)),
               round(.data$node2..phylepic.bootstrap_numeric, digits = 0) > 0
-          ),
-          label = round(.data$node2..phylepic.bootstrap_numeric, digits = 0)
-        ),
+            )
+        },
         flipped = TRUE,
         label_pos = 0.75,
         label_size = 3,
