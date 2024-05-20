@@ -4,7 +4,7 @@
 #' @importFrom rlang %||%
 #' @export
 GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
-  default_aes = aes(fill = "grey20", colour = NA, linewidth = 0.1, linetype = 1,
+  default_aes = aes(fill = "grey20", colour = "grey20", linewidth = 0.1, linetype = 1,
                     alpha = NA, width = NA, height = NA),
   required_aes = c("x", "y"),
   optional_aes = c("label"),
