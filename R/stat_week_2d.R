@@ -90,7 +90,7 @@ StatWeek2d <- ggplot2::ggproto("StatWeek2d", ggplot2::Stat,
   compute_group = function(
     data, scales,
     binwidth.y = NULL, bins.y = 30, breaks.y = NULL, center.y = NULL,
-    boundary.y = NULL, closed.y = NULL, drop = TRUE, week_start = 5L
+    boundary.y = NULL, closed.y = c("left", "right"), drop = TRUE, week_start = 5L
   ) {
     if (!inherits(scales$x, "ScaleContinuousDate")) {
       cli::cli_abort(c(
