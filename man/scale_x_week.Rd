@@ -11,12 +11,13 @@ scale_x_week(
   date_labels = waiver(),
   week_minor_breaks = waiver(),
   oob = oob_infinite,
+  limits = NULL,
   ...,
   week_start = getOption("phylepic.week_start")
 )
 }
 \arguments{
-\item{name, labels, date_labels, oob, ...}{see \code{\link[ggplot2:scale_date]{ggplot2::scale_x_date()}}.}
+\item{name, labels, date_labels, oob, limits, ...}{see \code{\link[ggplot2:scale_date]{ggplot2::scale_x_date()}}.}
 
 \item{week_breaks, week_minor_breaks}{frequency of breaks in number of weeks (e.g. \code{2} for fortnightly breaks).}
 
@@ -30,5 +31,12 @@ option, e.g. \code{options(phylepic.week_start = "Monday")}.}
 a ggplot scale object.
 }
 \description{
-Date scale with breaks specified by week
+This produces a scale that is measured in days as with \link[ggplot2:scale_date]{ggplot2::scale_x_date},
+however it will snap breaks and limits to week boundaries so that things
+work as intended when binning by week.
+}
+\details{
+Any \code{limits} specified are converted to the nearest week boundary that
+includes the specified dates, i.e. the lower limit will be rounded down and
+the upper limit rounded up so that the limits are week boundaries.
 }

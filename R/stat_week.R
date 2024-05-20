@@ -10,6 +10,17 @@
 #'
 #' @return ggplot2 stat layer.
 #' @export
+#' @examples
+#' library(ggplot2)
+#'
+#' set.seed(1)
+#' events <- rep(as.Date("2024-01-31") - 0:30, rpois(31, 2))
+#' df <- data.frame(date = events)
+#'
+#' ggplot(df) + stat_week(aes(date), week_start = "Monday")
+#'
+#' # or equivalently:
+#' # ggplot(df) + geom_bar(aes(date), stat = "week", week_start = "Monday")
 stat_week <- function(
   mapping = NULL,
   data = NULL,

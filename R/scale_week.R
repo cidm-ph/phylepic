@@ -1,5 +1,13 @@
 #' Date scale with breaks specified by week
 #'
+#' This produces a scale that is measured in days as with [ggplot2::scale_x_date],
+#' however it will snap breaks and limits to week boundaries so that things
+#' work as intended when binning by week.
+#'
+#' Any `limits` specified are converted to the nearest week boundary that
+#' includes the specified dates, i.e. the lower limit will be rounded down and
+#' the upper limit rounded up so that the limits are week boundaries.
+#'
 #' @param week_breaks,week_minor_breaks
 #'   frequency of breaks in number of weeks (e.g. `2` for fortnightly breaks).
 #' @param name,labels,date_labels,oob,limits,...

@@ -105,8 +105,14 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 #' Any `x` values that are infinite (i.e. `-Inf` or `Inf`) would normally be
 #' dropped by ggplot's layers. If any such values survive the stat processing,
 #' they will be drawn by `geom_calendar()` as triangles at the respective edges
-#' of the scale. This is intended to work with a scale configures to use
+#' of the scale. This is intended to work with a scale configured to use
 #' [oob_infinite()] for out of bounds handling.
+#' The triangles are drawn with their base (vertical edge) sitting on the scale
+#' limit, and their width equal to half of the median bin width.
+#'
+#' Note that the `label` aesthetic will be dropped if the data are not grouped
+#' in the expected way. In general this means that all rows contributing to a
+#' given bin must have the same value for the `label` aesthetic.
 #'
 #' @param label_params additional parameters for text labels if present
 #'   (see [ggplot2::geom_text()]).
@@ -114,6 +120,26 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 #'   see [ggplot2::geom_tile()].
 #'
 #' @export
+#' @examples
+#' library(ggplot2)
+#'
+#' set.seed(1)
+#' events <- rep(as.Date("2024-01-31") - 0:30, rpois(31, 6))
+#' values <- round(rgamma(length(events), 1, 0.01))
+#' df <- data.frame(date = events, value = values)
+#'
+#' ggplot(df) +
+#'     geom_calendar(
+#'         aes(date, value, label = after_stat(count)),
+#'         colour = "white",
+#'         stat = "week_2d",
+#'         week_start = "Monday",
+#'         bins.y = 10
+#'     ) +
+#'     scale_x_week(
+#'         limits = as.Date(c("2024-01-08", NA)),
+#'         expand = expansion(add = 3.5)
+#'     )
 geom_calendar <- function(
   mapping = NULL,
   data = NULL,

@@ -44,3 +44,18 @@ Computes week bins for date data in the x aesthetic, and allows
 the binning to be specified for the y aesthetic. This is mostly equivalent to
 \code{\link[ggplot2:geom_bin_2d]{ggplot2::stat_bin_2d()}} with the x aesthetic handling fixed to weeks.
 }
+\details{
+The computed aesthetics are similar to those of \code{stat_bin_2d()}, including
+\code{after_stat(count)}, \code{after_stat(density)}, and the bin positions and sizes:
+\code{after_stat(xmin)}, \code{after_stat(height)}, and so on.
+}
+\examples{
+library(ggplot2)
+
+set.seed(1)
+events <- rep(as.Date("2024-01-31") - 0:30, rpois(31, 6))
+values <- round(rgamma(length(events), 1, 0.01))
+df <- data.frame(date = events, value = values)
+
+ggplot(df) + stat_week_2d(aes(date, value), week_start = "Monday")
+}

@@ -37,4 +37,16 @@ Computes weeks for date data. This is mostly equivalent to
 \code{\link[ggplot2:geom_histogram]{ggplot2::stat_bin()}} with the bins fixed to weeks starting on a particular
 day.
 }
+\examples{
+library(ggplot2)
+
+set.seed(1)
+events <- rep(as.Date("2024-01-31") - 0:30, rpois(31, 2))
+df <- data.frame(date = events)
+
+ggplot(df) + stat_week(aes(date), week_start = "Monday")
+
+# or equivalently:
+# ggplot(df) + geom_bar(aes(date), stat = "week", week_start = "Monday")
+}
 \keyword{datasets}

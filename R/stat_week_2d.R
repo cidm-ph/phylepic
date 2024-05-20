@@ -4,6 +4,10 @@
 #' the binning to be specified for the y aesthetic. This is mostly equivalent to
 #' [ggplot2::stat_bin_2d()] with the x aesthetic handling fixed to weeks.
 #'
+#' The computed aesthetics are similar to those of `stat_bin_2d()`, including
+#' `after_stat(count)`, `after_stat(density)`, and the bin positions and sizes:
+#' `after_stat(xmin)`, `after_stat(height)`, and so on.
+#'
 #' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,...
 #'   See [ggplot2::stat_bin_2d].
 #' @param bins.y,binwidth.y,breaks.y,center.y,boundary.y,closed.y
@@ -13,6 +17,15 @@
 #'
 #' @return ggplot2 stat layer.
 #' @export
+#' @examples
+#' library(ggplot2)
+#'
+#' set.seed(1)
+#' events <- rep(as.Date("2024-01-31") - 0:30, rpois(31, 6))
+#' values <- round(rgamma(length(events), 1, 0.01))
+#' df <- data.frame(date = events, value = values)
+#'
+#' ggplot(df) + stat_week_2d(aes(date, value), week_start = "Monday")
 stat_week_2d <- function(
   mapping = NULL,
   data = NULL,
