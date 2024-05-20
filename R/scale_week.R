@@ -2,7 +2,7 @@
 #'
 #' @param week_breaks,week_minor_breaks
 #'   frequency of breaks in number of weeks (e.g. `2` for fortnightly breaks).
-#' @param name,labels,date_labels,oob,...
+#' @param name,labels,date_labels,oob,limits,...
 #'   see [ggplot2::scale_x_date()].
 #' @inheritParams week_breaks
 #'
@@ -15,6 +15,7 @@ scale_x_week <- function(
   date_labels = waiver(),
   week_minor_breaks = waiver(),
   oob = oob_infinite,
+  limits = NULL,
   ...,
   week_start = getOption("phylepic.week_start")
 ) {
@@ -23,6 +24,12 @@ scale_x_week <- function(
 
   breaks <- week_breaks(week_breaks, week_start = week_start)
   minor_breaks <- week_breaks(week_minor_breaks, week_start = week_start)
+  if (!is.null(limits)) {
+    lim_lo <- if (is.na(limits[[1]])) NA else floor_week(limits[[1]])
+    lim_hi_idx <- if (length(limits > 1)) 2L else 1L
+    lim_hi <- if (is.na(limits[[lim_hi_idx]])) NA else ceiling_week(limits[[lim_hi_idx]])
+    limits <- date_to_week(c(lim_lo, lim_hi), as_week_start(week_start))
+  }
 
   ggplot2::scale_x_date(
     name = name,
@@ -33,6 +40,7 @@ scale_x_week <- function(
     minor_breaks = minor_breaks,
     date_minor_breaks = waiver(),
     oob = oob,
+    limits = limits,
     ...
   )
 }
