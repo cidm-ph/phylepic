@@ -133,16 +133,8 @@ and does some consistency checks. The resulting <code>phylepic</code>
 object has a plot method that guesses sensible defaults:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/phylepic.html">phylepic</a></span><span class="op">(</span><span class="va">clade</span>, <span class="va">metadata</span>, <span class="va">name</span>, <span class="va">collection_date</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_edge_elbow()`.</span></span>
-<span><span class="co">#&gt; Caused by error in `if (!data$circular[1] &amp;&amp; n%%2 == 0) ...`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> missing value where TRUE/FALSE needed</span></span>
-<span><span class="co">#&gt; Warning: Removed 1 row containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Warning: Computation failed in `stat_edge_elbow()`.</span></span>
-<span><span class="co">#&gt; Caused by error in `if (!data$circular[1] &amp;&amp; n%%2 == 0) ...`:</span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> missing value where TRUE/FALSE needed</span></span>
-<span><span class="co">#&gt; Warning: Removed 1 row containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 1 row containing non-finite outside the scale range (`stat_week()`).</span></span>
+<span><span class="co">#&gt; Removed 1 row containing non-finite outside the scale range (`stat_week()`).</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Metadata bars were added for all factor columns in the metadata
 frame, with different categorical colour scales. The dates were binned
