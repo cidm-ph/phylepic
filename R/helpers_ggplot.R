@@ -141,10 +141,10 @@ ggplot_build.phylepic_ggplot <- function(plot) {
 
 #' @importFrom ggplot2 ggplot_gtable
 #' @export
-ggplot_gtable.phylepic_ggplot_build <- function(plot) {
-  panel_name <- attr(plot, "phylepic.panel")
+ggplot_gtable.phylepic_ggplot_build <- function(data) {
+  panel_name <- attr(data, "phylepic.panel")
   withCallingHandlers(
-    NextMethod(generic = "ggplot_gtable", object = plot),
+    NextMethod(generic = "ggplot_gtable", object = data),
     message = annotate_and_reraise(panel_name, "muffleMessage"),
     warning = annotate_and_reraise(panel_name, "muffleWarning"),
     error = annotate_and_reraise(panel_name)
