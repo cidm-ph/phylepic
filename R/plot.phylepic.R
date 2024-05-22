@@ -142,9 +142,7 @@ autoplot.phylepic <- function(
     )
   }
 
-  if (is.null(guides)) {
-    panel
-  } else {
+  if (!is.null(guides)) {
     # prepare the combined legends
     guides <- merge_guides(guides)
     theme <- (plot.bars %||% plot.epicurve %||% plot.tree %||% plot.calendar) |>
@@ -156,12 +154,14 @@ autoplot.phylepic <- function(
     legends <- guides$assemble(theme)
     grDevices::dev.off()
 
-    cowplot::plot_grid(
+    panel <- cowplot::plot_grid(
       panel,
       legends$right,
       rel_widths = c(width.tree, width.legend)
     )
   }
+
+  panel
 }
 
 apply_plot <- function(plot_cfg, data) {

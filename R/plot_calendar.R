@@ -73,7 +73,8 @@ plot_calendar <- function(
       coord_tree()
   }
 
-  if (missing(phylepic)) wrapper else wrapper(phylepic)
+  plot <- if (missing(phylepic)) wrapper else wrapper(phylepic)
+  annotate_conditions_with_panel(plot, "calendar")
 }
 
 #' @importFrom ggplot2 rel
@@ -116,5 +117,6 @@ conform_plot_calendar <- function(plot, scale.date, scale.fill, n) {
     cli::cli_abort(c("x" = "{.arg plot.calendar} does not have a date scale for {.field x}"))
   }
 
-  plot + ggplot2::theme(legend.position = "none")
+  plot <- plot + ggplot2::theme(legend.position = "none")
+  annotate_conditions_with_panel(plot, "calendar")
 }

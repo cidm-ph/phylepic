@@ -39,7 +39,8 @@ plot_epicurve <- function(
       theme_plot_epicurve()
   }
 
-  if (missing(phylepic)) wrapper else wrapper(phylepic)
+  plot <- if (missing(phylepic)) wrapper else wrapper(phylepic)
+  annotate_conditions_with_panel(plot, "epicurve")
 }
 
 theme_plot_epicurve <- function() {
@@ -69,5 +70,6 @@ conform_plot_epicurve <- function(plot, scale.date, scale.fill) {
     ))
   }
 
-  plot + ggplot2::theme(legend.position = "none")
+  plot <- plot + ggplot2::theme(legend.position = "none")
+  annotate_conditions_with_panel(plot, "epicurve")
 }

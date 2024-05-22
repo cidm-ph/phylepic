@@ -117,6 +117,35 @@ concat_guides <- function(acc, nxt) {
   acc
 }
 
+annotate_conditions_with_panel <- function(plot, panel_name) {
+  attr(plot, "phylepic.panel") <- panel_name
+  if (!inherits(plot, "phylepic_ggplot"))
+    class(plot) <- c("phylepic_ggplot", class(plot))
+  plot
+}
+
+#' @importFrom ggplot2 ggplot_build
+#' @export
+ggplot_build.phylepic_ggplot <- function(plot) {
+  panel_name <- attr(plot, "phylepic.panel")
+  withCallingHandlers(
+    NextMethod(generic = "ggplot_build", object = plot),
+    message = annotate_and_reraise(panel_name, "muffleMessage"),
+    warning = annotate_and_reraise(panel_name, "muffleWarning"),
+    error = annotate_and_reraise(panel_name)
+  )
+}
+
+annotate_and_reraise <- function(panel_name, restart = NULL) {
+  function(cnd) {
+    if (inherits(cnd, c("rlang_error", "rlang_warning", "rlang_message"))) {
+      cnd$message <- paste0(cnd$message, " [phylepic: plot.", panel_name, "]")
+      rlang::cnd_signal(cnd)
+      if (!is.null(restart)) invokeRestart(restart)
+    }
+  }
+}
+
 # The below are inlined from ggplot2 3.5.0
 
 is.waive <- function(x) {

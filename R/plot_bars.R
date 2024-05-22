@@ -65,7 +65,8 @@ plot_bars <- function(phylepic, ...) {
       coord_tree()
   }
 
-  if (missing(phylepic)) wrapper else wrapper(phylepic)
+  plot <- if (missing(phylepic)) wrapper else wrapper(phylepic)
+  annotate_conditions_with_panel(plot, "bars")
 }
 
 guess_scales <- function(data) {
@@ -114,5 +115,6 @@ conform_plot_bars <- function(plot) {
     scale
   })
 
-  plot + ggplot2::theme(legend.position = "none")
+  plot <- plot + ggplot2::theme(legend.position = "none")
+  annotate_conditions_with_panel(plot, "bars")
 }

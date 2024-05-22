@@ -68,7 +68,8 @@ plot_tree <- function(phylepic, label = .data$name, bootstrap = TRUE) {
       coord_tree()
   }
 
-  if (missing(phylepic)) wrapper else wrapper(phylepic)
+  plot <- if (missing(phylepic)) wrapper else wrapper(phylepic)
+  annotate_conditions_with_panel(plot, "tree")
 }
 
 theme_plot_tree <- function() {
@@ -125,7 +126,8 @@ conform_plot_tree <- function(plot) {
     ))
   }
 
-  plot +
+  plot <-
+    plot +
     warn_theme(
       ggplot2::theme_get() + plot$theme,
       panel.background = ggplot2::element_blank(),
@@ -134,6 +136,8 @@ conform_plot_tree <- function(plot) {
       .name = "plot.tree"
     ) +
     ggplot2::theme(legend.position = "none")
+
+  annotate_conditions_with_panel(plot, "tree")
 }
 
 layout_is_circular <- function(layout) {
