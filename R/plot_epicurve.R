@@ -46,6 +46,7 @@ plot_epicurve <- function(
 theme_plot_epicurve <- function() {
   ggplot2::theme(
     axis.title = ggplot2::element_blank(),
+    axis.line.x.bottom = ggplot2::element_line(),
     plot.margin = ggplot2::margin(l = 0, r = 0, t = 5, unit = "pt"),
     panel.grid.major.x = ggplot2::element_line(colour = "#aaaaaa"),
   )
@@ -69,6 +70,16 @@ conform_plot_epicurve <- function(plot, scale.date, scale.fill) {
       "x" = "{.arg plot.calendar} does not have a date scale for {.field x}"
     ))
   }
+
+  plot <- mutate_scale(plot, "y", ggplot2::scale_y_continuous(), f = function(scale) {
+    # the documented default is 5% expansion, so replace now
+    if (is.waive(scale$expand)) scale$expand <- ggplot2::expansion(mult = 0.05)
+
+    # don't expand the lower limit
+    scale$expand[[1]] <- 0
+    scale$expand[[2]] <- 0
+    scale
+  })
 
   plot <- plot + ggplot2::theme(legend.position = "none")
   annotate_conditions_with_panel(plot, "epicurve")
