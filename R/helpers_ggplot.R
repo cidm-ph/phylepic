@@ -128,8 +128,23 @@ annotate_conditions_with_panel <- function(plot, panel_name) {
 #' @export
 ggplot_build.phylepic_ggplot <- function(plot) {
   panel_name <- attr(plot, "phylepic.panel")
-  withCallingHandlers(
+  build <- withCallingHandlers(
     NextMethod(generic = "ggplot_build", object = plot),
+    message = annotate_and_reraise(panel_name, "muffleMessage"),
+    warning = annotate_and_reraise(panel_name, "muffleWarning"),
+    error = annotate_and_reraise(panel_name)
+  )
+  class(build) <- c("phylepic_ggplot_build", class(build))
+  attr(build, "phylepic.panel") <- panel_name
+  build
+}
+
+#' @importFrom ggplot2 ggplot_gtable
+#' @export
+ggplot_gtable.phylepic_ggplot_build <- function(plot) {
+  panel_name <- attr(plot, "phylepic.panel")
+  withCallingHandlers(
+    NextMethod(generic = "ggplot_gtable", object = plot),
     message = annotate_and_reraise(panel_name, "muffleMessage"),
     warning = annotate_and_reraise(panel_name, "muffleWarning"),
     error = annotate_and_reraise(panel_name)
