@@ -70,7 +70,13 @@ extract_theme <- function(plot, complete = FALSE) {
 }
 
 extract_guides <- function(plot) {
-  if (!inherits(plot, "ggplot_built")) plot <- ggplot2::ggplot_build(plot)
+  withCallingHandlers(
+    plot <- ggplot2::ggplot_build(plot),
+    warning = function(cnd) {
+      # any warnings will be displayed in the final build, no need to duplicate
+      invokeRestart("muffleWarning")
+    }
+  )
   plot$plot$guides
 }
 
