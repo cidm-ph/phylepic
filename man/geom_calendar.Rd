@@ -13,7 +13,7 @@ geom_calendar(
   position = "identity",
   ...,
   linejoin = "mitre",
-  label_params = list(),
+  label_params = list(colour = "grey30"),
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE

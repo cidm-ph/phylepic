@@ -42,7 +42,6 @@ plot_calendar <- function(
         week_start = week_start,
         binwidth.y = 1L,
         na.rm = TRUE,
-        colour = "grey30",
         geom = "calendar",
         linewidth = 0.3,
         label_params = labels.params
@@ -58,7 +57,6 @@ plot_calendar <- function(
         width = 1L,
         height = 1L,
         na.rm = TRUE,
-        colour = "grey30",
         linewidth = 0.3,
         label_params = labels.params
       )

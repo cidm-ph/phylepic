@@ -4,7 +4,7 @@
 #' @importFrom rlang %||%
 #' @export
 GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
-  default_aes = aes(fill = "grey20", colour = "grey20", linewidth = 0.1, linetype = 1,
+  default_aes = aes(fill = "grey20", colour = NA, linewidth = 0.1, linetype = 1,
                     alpha = NA, width = NA, height = NA),
   required_aes = c("x", "y"),
   optional_aes = c("label"),
@@ -30,7 +30,7 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 
   draw_panel = function(
     self, data, panel_params, coord, lineend = "butt", linejoin = "mitre",
-    label_params = list()
+    label_params = list(colour = "grey30")
   ) {
     inf <- data[is.infinite(data$x), ]
     data <- data[is.finite(data$x), ]
@@ -53,6 +53,14 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
       )
     )
 
+    names(label_params) <- ggplot2::standardise_aes_names(names(label_params))
+    if ("colour" %in% names(label_params) && is.na(label_params$colour)) {
+      cli::cli_warn(c(
+        "Trying to draw labels with missing colour ({.fn geom_calendar})",
+        "i" = 'Set label colour with {.code label_params = list(colour = "grey20", ...)}'
+      ))
+    }
+
     grobs <- if ("label" %in% colnames(data)) {
       text_data <- ggplot2::GeomText$use_defaults(data, label_params)
       labels <- ggplot2::GeomText$draw_panel(text_data, panel_params, coord)
@@ -72,14 +80,22 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 
       x_tip <- ifelse(inf$x == inf$xmin, inf$xmax, inf$xmin)
       x_base <- ifelse(inf$x == inf$xmin, inf$xmin, inf$xmax)
+      arr_fill <- ggplot2::fill_alpha(inf$fill, inf$alpha)
+      arr_colour <- inf$colour
+      arr_blank <- is.na(inf$colour) & is.na(arr_fill)
+      if (any(arr_blank)) {
+        cli::cli_warn(
+          "Dropped {sum(arr_blank)} calendar arrows with no fill or colour ({.fn geom_calendar})",
+        )
+      }
       arrows <- grid::polygonGrob(
         x = c(rbind(x_tip, x_base, x_base)),
         y = c(rbind(inf$y, inf$ymax, inf$ymin)),
         id = rep(seq_len(nrow(inf)), each = 3),
         default.units = "native",
         gp = grid::gpar(
-          col = inf$colour,
-          fill = ggplot2::fill_alpha(inf$fill, inf$alpha),
+          col = arr_colour,
+          fill = arr_fill,
           lwd = inf$linewidth * ggplot2::.pt,
           lty = inf$linetype,
           linejoin = linejoin,
@@ -147,7 +163,7 @@ geom_calendar <- function(
   position = "identity",
   ...,
   linejoin = "mitre",
-  label_params = list(),
+  label_params = list(colour = "grey30"),
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
