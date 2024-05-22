@@ -98,43 +98,48 @@ and a label for any isolates that were assigned to a genomic cluster.
 These are read in from a CSV file:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"enteric_metadata.csv"</span>, package <span class="op">=</span> <span class="st">"phylepic"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">metadata</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       name collection_date source  cluster</span></span>
-<span><span class="co">#&gt; 1 NSW-0004      2013-02-18   &lt;NA&gt;     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 2 NSW-0020      2016-11-19   &lt;NA&gt;     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 3 NSW-0029      2017-01-13   &lt;NA&gt;     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 4 NSW-0042      2017-02-28   &lt;NA&gt;     &lt;NA&gt;</span></span>
-<span><span class="co">#&gt; 5 NSW-0051      2017-11-20   &lt;NA&gt; Clust-01</span></span>
-<span><span class="co">#&gt; 6 NSW-0054      2017-12-23   &lt;NA&gt;     &lt;NA&gt;</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">metadata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'data.frame':    50 obs. of  4 variables:</span></span>
+<span><span class="co">#&gt;  $ name           : chr  "NSW-0004" "NSW-0020" "NSW-0029" "NSW-0042" ...</span></span>
+<span><span class="co">#&gt;  $ collection_date: chr  "2013-02-18" "2016-11-19" "2017-01-13" "2017-02-28" ...</span></span>
+<span><span class="co">#&gt;  $ source         : chr  NA NA NA NA ...</span></span>
+<span><span class="co">#&gt;  $ cluster        : chr  NA NA NA NA ...</span></span></code></pre></div>
 <p>The only requirements here are that we have a column that corresponds
 to the tip labels from the tree (here called <code>name</code>), and one
 that has dates represented as <code>Date</code> objects. We’ll also
 indicate the two columns with categorical data by converting them to
 factors:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>  <span class="va">metadata</span>,</span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">source</span>, <span class="va">cluster</span><span class="op">)</span>, <span class="va">factor</span><span class="op">)</span>,</span>
-<span>  collection_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">collection_date</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">metadata</span> <span class="op">&lt;-</span></span>
+<span>  <span class="va">metadata</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">source</span>, <span class="va">cluster</span><span class="op">)</span>, <span class="va">factor</span><span class="op">)</span>,</span>
+<span>    collection_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">collection_date</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="basic-plotting">Basic plotting<a class="anchor" aria-label="anchor" href="#basic-plotting"></a>
 </h2>
-<p>To start with, we can pull out one clade from the tree to make a
-small plot:</p>
+<p>To start with, we should get the tree looking how we want it. You
+might want to root or re-root the tree (see <code><a href="https://rdrr.io/pkg/ape/man/root.html" class="external-link">ape::root</a></code>),
+reorganise the tip order (<code><a href="https://rdrr.io/pkg/ape/man/ladderize.html" class="external-link">ape::ladderize</a></code>), or prune away
+parts of the tree that aren’t relevant. For now, let’s extract a single
+clade from our larger tree:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">clade.parent</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/mrca.html" class="external-link">getMRCA</a></span><span class="op">(</span><span class="va">tree</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NSW-0324"</span>, <span class="st">"NSW-0330"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">clade</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/drop.tip.html" class="external-link">extract.clade</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">clade.parent</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">clade</span><span class="op">)</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
 <p>The <code><a href="../reference/phylepic.html">phylepic()</a></code> function joins a tree with its metadata
-and does some consistency checks. The resulting <code>phylepic</code>
-object has a plot method that guesses sensible defaults:</p>
+and does some consistency checks. It can help you to drop tips without
+metadata if desired. It’s also where we identify which columns of our
+metadata correspond to the tip labels and dates. The resulting
+<code>phylepic</code> object has a plot method that guesses sensible
+defaults:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/phylepic.html">phylepic</a></span><span class="op">(</span><span class="va">clade</span>, <span class="va">metadata</span>, <span class="va">name</span>, <span class="va">collection_date</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 1 row containing non-finite outside the scale range (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Removed 1 row containing non-finite outside the scale range (`stat_week()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 1 row containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Metadata bars were added for all factor columns in the metadata
 frame, with different categorical colour scales. The dates were binned
@@ -152,8 +157,8 @@ default plot needs some configuration to be useful:</p>
 <code class="sourceCode R"><span><span class="va">phydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phylepic.html">phylepic</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">metadata</span>, <span class="va">name</span>, <span class="va">collection_date</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">phydata</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Removed 7 rows containing non-finite outside the scale range (`stat_week()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-8-1.png" width="1056"></p>
 <div class="section level3">
 <h3 id="the-date-scale">The date scale<a class="anchor" aria-label="anchor" href="#the-date-scale"></a>
@@ -180,8 +185,8 @@ the final grid using <code>height.tree</code> (choosing here to make is
 both the relevant panels:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">phydata</span>, scale.date <span class="op">=</span> <span class="va">date_scale</span>, height.tree <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Removed 28 rows containing non-finite outside the scale range (`stat_week()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-11-1.png" width="1056"></p>
 <p>Note that dates outside our chosen date limits are drawn on the
 calendar as triangles at the corresponding edge of the scale. Some rows
@@ -214,26 +219,29 @@ that we can have it be consistent between panels:</p>
 <span>  na.translate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="co"># we'll use this scale later for both fill and colour aesthetics</span></span>
 <span>  aesthetics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fill"</span>, <span class="st">"colour"</span><span class="op">)</span>,</span>
-<span>  <span class="co"># make the dots on the legend bigger so we can see the colours</span></span>
-<span>  guide <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html" class="external-link">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>To manipulate the tree, we use <code>plot_tree</code>, which creates
 the base plot to which we can add our new layers:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_tree.html">plot_tree</a></span><span class="op">(</span><span class="va">phydata</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="co"># `filter = leaf` in ggraph geoms means that they only draw the tips</span></span>
-<span>  <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html" class="external-link">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">leaf</span>, colour <span class="op">=</span> <span class="va">cluster</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html" class="external-link">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">leaf</span>, colour <span class="op">=</span> <span class="va">cluster</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="va">cluster_scale</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span>
 <span><span class="co">#&gt; Warning: Removed 11 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span></code></pre></div>
-<p><img src="phylepic_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
+<span><span class="co">#&gt; (`geom_point()`). [phylepic: plot.tree]</span></span></code></pre></div>
+<p><img src="phylepic_files/figure-html/unnamed-chunk-13-1.png" width="700">
+Note that the guides from each panel will be merged in the final plot.
+If we don’t put <code>show.legend = FALSE</code> here, the guide for the
+cluster aesthetic will show circles instead of squares for the legend
+keys.</p>
 <p>All of the columns from our metadata frame are available (for the
 tips) to use in ggraph’s aesthetic mappings.</p>
-<p>Next, we’ll want to hide the redundant coloured tiles describing the
-cluster. To do this, we use <code>plot_bars</code> to override the
-default behaviour of creating a bar for each factor in the metadata
-frame. This helper takes arguments in the form
+<p>Next, we’ll want to hide the redundant column of coloured tiles
+corresponding to the cluster. Remember that this column was drawn
+because the default <code>plot.bars</code> panel makes a column of tiles
+for each factor column in out data frame. We can use
+<code>plot_bars</code> to override the default behaviour. This helper
+takes arguments in the form
 <code>&lt;column name&gt; = &lt;scale definition&gt;</code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
@@ -241,7 +249,7 @@ frame. This helper takes arguments in the form
 <span>  plot.tree <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="co"># this function will be called with x = phydata</span></span>
 <span>    <span class="fu"><a href="../reference/plot_tree.html">plot_tree</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
-<span>      <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html" class="external-link">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">leaf</span>, colour <span class="op">=</span> <span class="va">cluster</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html" class="external-link">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">leaf</span>, colour <span class="op">=</span> <span class="va">cluster</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="va">cluster_scale</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  plot.bars <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -256,6 +264,7 @@ frame. This helper takes arguments in the form
 <span>        drop <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>        na.translate <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span>      <span class="op">)</span>,</span>
+<span>      <span class="co"># if we wanted more tile columns, we would add them here</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  scale.date <span class="op">=</span> <span class="va">date_scale</span>,</span>
@@ -264,14 +273,10 @@ frame. This helper takes arguments in the form
 <span>  width.legend <span class="op">=</span> <span class="fl">4</span>, <span class="co">#</span></span>
 <span>  height.tree <span class="op">=</span> <span class="fl">6</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span>
-<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span>
 <span><span class="co">#&gt; Warning: Removed 11 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
+<span><span class="co">#&gt; (`geom_point()`). [phylepic: plot.tree]</span></span>
 <span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`).</span></span></code></pre></div>
+<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-14-1.png" width="1056"></p>
 <p>Each <code>plot.*</code> argument will normally be given a function
 that is called with a single parameter: the phylepic object provided to
@@ -315,7 +320,7 @@ scale).</p>
 <span>  <span class="va">phydata</span>,</span>
 <span>  plot.tree <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="fu"><a href="../reference/plot_tree.html">plot_tree</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
-<span>      <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html" class="external-link">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">leaf</span>, colour <span class="op">=</span> <span class="va">cluster</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>      <span class="fu">ggraph</span><span class="fu">::</span><span class="fu"><a href="https://ggraph.data-imaginist.com/reference/geom_node_point.html" class="external-link">geom_node_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>filter <span class="op">=</span> <span class="va">leaf</span>, colour <span class="op">=</span> <span class="va">cluster</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="va">cluster_scale</span></span>
 <span>  <span class="op">}</span>,</span>
 <span>  plot.bars <span class="op">=</span> <span class="fu"><a href="../reference/plot_bars.html">plot_bars</a></span><span class="op">(</span></span>
@@ -335,21 +340,23 @@ scale).</p>
 <span>  width.legend <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  height.tree <span class="op">=</span> <span class="fl">6</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span>
-<span><span class="co">#&gt; Duplicated `override.aes` is ignored.</span></span>
-<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span>
-<span><span class="co">#&gt; Duplicated `override.aes` is ignored.</span></span>
 <span><span class="co">#&gt; Warning: Removed 11 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">#&gt; (`geom_point()`).</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span>
+<span><span class="co">#&gt; (`geom_point()`). [phylepic: plot.tree]</span></span>
+<span><span class="co">#&gt; Warning: Dropped 8 calendar arrows with no fill or colour</span></span>
+<span><span class="co">#&gt; (`geom_calendar()`) [phylepic: plot.calendar]</span></span>
 <span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`).</span></span>
-<span><span class="co">#&gt; Warning: Duplicated `override.aes` is ignored.</span></span></code></pre></div>
+<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-16-1.png" width="1056"></p>
 <p>Because the cluster colour scales are consistent across panels, the
 legend guides are automatically combined.</p>
+<p>The warning messages coming from ggplot are annotated to indicate
+which panel was responsible. Here the warnings are telling us that * 11
+tree tips couldn’t be drawn because they have no cluster, * 8 rows (a
+subset of those 11) have known dates that are outside the calendar axis
+range, but the arrows couldn’t be drawn because they have no cluster and
+we configured the cluster scale with <code>na.translate = FALSE</code>,
+and * 28 rows didn’t contribute to the epidemic curve because their date
+was missing or out of range.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
