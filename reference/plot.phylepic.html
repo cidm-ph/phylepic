@@ -16,7 +16,7 @@ specified plots will look reasonable when assembled.'><!-- mathjax --><script sr
     
     <a class="navbar-brand me-2" href="../index.html">phylepic</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,6 +29,9 @@ specified plots will look reasonable when assembled.'><!-- mathjax --><script sr
 </li>
 <li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -61,7 +64,21 @@ specified plots will look reasonable when assembled.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for phylepic</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  plot.tree <span class="op">=</span> <span class="fu"><a href="plot_tree.html">plot_tree</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  plot.bars <span class="op">=</span> <span class="fu"><a href="plot_bars.html">plot_bars</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  plot.calendar <span class="op">=</span> <span class="fu"><a href="plot_calendar.html">plot_calendar</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  plot.epicurve <span class="op">=</span> <span class="fu"><a href="plot_epicurve.html">plot_epicurve</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  scale.date <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scale.fill <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  width.tree <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  width.bars <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  width.date <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  width.legend <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  height.tree <span class="op">=</span> <span class="fl">2</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for phylepic</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot</a></span><span class="op">(</span></span>
@@ -84,15 +101,7 @@ specified plots will look reasonable when assembled.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
-<dd><p>Arguments passed on to <code>autoplot.phylepic</code></p><dl><dt><code></code></dt>
-<dd></dd>
-
-  
-</dl></dd>
-
-
-<dt>object, x</dt>
-<dd><p>Object of class "phylepic".</p></dd>
+<dd><p>Ignored.</p></dd>
 
 
 <dt>plot.tree</dt>
@@ -139,6 +148,10 @@ specified plots will look reasonable when assembled.</p>
 
 <dt>height.tree</dt>
 <dd><p>Relative height of the tree panel.</p></dd>
+
+
+<dt>object, x</dt>
+<dd><p>Object of class "phylepic".</p></dd>
 
 </dl></div>
     <div class="section level2">
