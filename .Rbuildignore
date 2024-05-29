@@ -7,3 +7,4 @@
 ^README\.Rmd$
 ^\.github$
 ^.lintr$
+^cran-comments\.md$
