@@ -5,7 +5,21 @@
 \alias{autoplot.phylepic}
 \title{Plot "phylepic" objects}
 \usage{
-\method{plot}{phylepic}(x, ...)
+\method{plot}{phylepic}(
+  x,
+  ...,
+  plot.tree = plot_tree(),
+  plot.bars = plot_bars(),
+  plot.calendar = plot_calendar(),
+  plot.epicurve = plot_epicurve(),
+  scale.date = NULL,
+  scale.fill = NULL,
+  width.tree = 10,
+  width.bars = 1,
+  width.date = 5,
+  width.legend = 2,
+  height.tree = 2
+)
 
 \method{autoplot}{phylepic}(
   object,
@@ -24,13 +38,7 @@
 )
 }
 \arguments{
-\item{...}{
-  Arguments passed on to \code{\link[=autoplot.phylepic]{autoplot.phylepic}}
-  \describe{
-    \item{\code{}}{}
-  }}
-
-\item{object, x}{Object of class "phylepic".}
+\item{...}{Ignored.}
 
 \item{plot.tree}{ggplot for the tree panel (see \link{plot_tree}).}
 
@@ -55,6 +63,8 @@
 \item{width.legend}{Relative width of the legend, if present.}
 
 \item{height.tree}{Relative height of the tree panel.}
+
+\item{object, x}{Object of class "phylepic".}
 }
 \description{
 The \code{autoplot} and \code{plot} methods for "phylepic" objects assemble various

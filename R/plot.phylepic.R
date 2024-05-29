@@ -28,18 +28,45 @@
 #' @param width.date Relative width of the calendar panel.
 #' @param width.legend Relative width of the legend, if present.
 #' @param height.tree Relative height of the tree panel.
+#' @param ... Ignored.
 #'
-#' @inheritDotParams autoplot.phylepic
 #' @family phylepic plots
 #' @export
-plot.phylepic <- function(x, ...) {
-  print(ggplot2::autoplot(object = x, ...))
+plot.phylepic <- function(
+  x,
+  ...,
+  plot.tree = plot_tree(),
+  plot.bars = plot_bars(),
+  plot.calendar = plot_calendar(),
+  plot.epicurve = plot_epicurve(),
+  scale.date = NULL,
+  scale.fill = NULL,
+  width.tree = 10,
+  width.bars = 1,
+  width.date = 5,
+  width.legend = 2,
+  height.tree = 2
+) {
+  print(ggplot2::autoplot(
+    object = x,
+    ...,
+    plot.tree = plot.tree,
+    plot.bars = plot.bars,
+    plot.calendar = plot.calendar,
+    plot.epicurve = plot.epicurve,
+    scale.date = scale.date,
+    scale.fill = scale.fill,
+    width.tree = width.tree,
+    width.bars = width.bars,
+    width.date = width.date,
+    width.legend = width.legend,
+    height.tree = height.tree
+  ))
 }
 
 #' @export
 #' @importFrom ggplot2 autoplot
 #' @importFrom rlang %||%
-#' @param ... Ignored.
 #' @rdname plot.phylepic
 autoplot.phylepic <- function(
   object,
