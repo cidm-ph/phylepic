@@ -10,10 +10,10 @@ Authors@R:
       person("Western Sydney Local Health District, NSW Health",
              role = "cph"))
 Description: A collection of utilities and 'ggplot2' extensions to assist with
-  visualisations in genomic epidemiology. This includes the phylepic chart, a
-  visual combination of a phylogenetic tree and a matched epidemic curve. The
-  included ggplot extensions such as date axes binned by week are relevant for
-  other applications in epidemiology and beyond.
+  visualisations in genomic epidemiology. This includes the 'phylepic' chart,
+  a visual combination of a phylogenetic tree and a matched epidemic curve.
+  The included 'ggplot2' extensions such as date axes binned by week are
+  relevant for other applications in epidemiology and beyond.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -5,7 +5,7 @@
 \alias{phylepic-package}
 \title{phylepic: Combined Visualisation of Phylogenetic and Epidemiological Data}
 \description{
-A collection of utilities and 'ggplot2' extensions to assist with visualisations in genomic epidemiology. This includes the phylepic chart, a visual combination of a phylogenetic tree and a matched epidemic curve. The included ggplot extensions such as date axes binned by week are relevant for other applications in epidemiology and beyond.
+A collection of utilities and 'ggplot2' extensions to assist with visualisations in genomic epidemiology. This includes the 'phylepic' chart, a visual combination of a phylogenetic tree and a matched epidemic curve. The included 'ggplot2' extensions such as date axes binned by week are relevant for other applications in epidemiology and beyond.
 }
 \seealso{
 Useful links:
