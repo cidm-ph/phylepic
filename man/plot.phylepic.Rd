@@ -66,8 +66,12 @@
 
 \item{object, x}{Object of class "phylepic".}
 }
+\value{
+\code{plot()} is usually called to display the plot, whereas \code{autoplot()}
+returns a "ggplot" object that can later be displayed with \code{print()}.
+}
 \description{
-The \code{autoplot} and \code{plot} methods for "phylepic" objects assemble various
+The \code{autoplot()} and \code{plot()} methods for "phylepic" objects assemble various
 panels into the final plot. To facilitate customisations, the plots from
 each panel can be overwritten. Some effort is made to ensure that the
 specified plots will look reasonable when assembled.

@@ -11,6 +11,8 @@
 #'   limit of the desired output range respectively.
 #'
 #' @rdname oob
+#' @return A numerical vector of the same length as `x` where out of bound
+#'   values have been replaced by `Inf` or `-Inf` accordingly.
 #' @export
 oob_infinite <- function(x, range = c(0, 1)) {
   force(range)

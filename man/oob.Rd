@@ -12,6 +12,10 @@ oob_infinite(x, range = c(0, 1))
 \item{range}{A numeric vector of length two giving the minimum and maximum
 limit of the desired output range respectively.}
 }
+\value{
+A numerical vector of the same length as \code{x} where out of bound
+values have been replaced by \code{Inf} or \code{-Inf} accordingly.
+}
 \description{
 This helper works the same way as \code{\link[scales:oob]{scales::oob_censor()}} and similar. Out of
 bounds values are pushed to positive or negative infinity. This is not useful

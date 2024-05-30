@@ -1,6 +1,6 @@
 #' Plot "phylepic" objects
 #'
-#' The `autoplot` and `plot` methods for "phylepic" objects assemble various
+#' The `autoplot()` and `plot()` methods for "phylepic" objects assemble various
 #' panels into the final plot. To facilitate customisations, the plots from
 #' each panel can be overwritten. Some effort is made to ensure that the
 #' specified plots will look reasonable when assembled.
@@ -30,6 +30,8 @@
 #' @param height.tree Relative height of the tree panel.
 #' @param ... Ignored.
 #'
+#' @return `plot()` is usually called to display the plot, whereas `autoplot()`
+#'   returns a "ggplot" object that can later be displayed with `print()`.
 #' @family phylepic plots
 #' @export
 plot.phylepic <- function(
