@@ -8,6 +8,8 @@
 [![r-universe
 status](https://cidm-ph.r-universe.dev/badges/phylepic)](https://cidm-ph.r-universe.dev)
 [![R-CMD-check](https://github.com/cidm-ph/phylepic/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cidm-ph/phylepic/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/phylepic)](https://CRAN.R-project.org/package=phylepic)
 <!-- badges: end -->
 
 Phylepic contains tools for visualisations that are useful for genomic
@@ -18,6 +20,9 @@ epidemiology of pathogens, designed for a public health setting.
 You can install phylepic like so:
 
 ``` r
+# CRAN release
+install.packages('phylepic')
+
 # development version
 install.packages('phylepic', repos = c('https://cidmp-ph.r-universe.dev', 'https://cloud.r-project.org'))
 ```
