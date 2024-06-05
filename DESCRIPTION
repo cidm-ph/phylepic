@@ -1,6 +1,6 @@
 Package: phylepic
 Title: Combined Visualisation of Phylogenetic and Epidemiological Data
-Version: 0.2.1
+Version: 0.2.1.9000
 Authors@R: 
     c(person(given = "Carl",
              family = "Suster",
