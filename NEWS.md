@@ -1,5 +1,7 @@
 # phylepic (development version)
 
+* Update citation to published manuscript.
+
 # phylepic 0.2.1
 
 * Unreleased.

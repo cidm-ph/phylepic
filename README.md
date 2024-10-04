@@ -55,5 +55,5 @@ See `citation("phylepic")`.
 
 Suster CJE, Watt AE, Wang Q, Chen SC, Kok J, Sintchenko V (2024).
 “Combined visualization of genomic and epidemiological data for
-outbreaks \[Preprint\].” *medRxiv*.
-[doi:10.1101/2024.04.02.24305229](https://doi.org/10.1101/2024.04.02.24305229),
+outbreaks.” *Epidemiology & Infection* 152: e110.
+[doi:10.1017/S0950268824001092](https://doi.org/10.1017/S0950268824001092),

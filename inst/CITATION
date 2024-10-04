@@ -1,9 +1,10 @@
 bibentry(
   bibtype  = "Article",
-  journal  = "medRxiv",
-  title    = "Combined visualization of genomic and epidemiological data for outbreaks [Preprint]",
+  journal  = "Epidemiology & Infection",
+  volume   = "152",
+  pages    = "e110",
+  title    = "Combined visualization of genomic and epidemiological data for outbreaks",
   author   = "Carl J. E. Suster and Anne E. Watt and Qinning Wang and Sharon C.-A. Chen and Jen Kok and Vitali Sintchenko",
   year     = "2024",
-  doi      = "10.1101/2024.04.02.24305229",
-  url      = "https://www.medrxiv.org/content/10.1101/2024.04.02.24305229v1"
+  doi      = "10.1017/S0950268824001092",
 )
