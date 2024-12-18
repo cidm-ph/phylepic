@@ -1,6 +1,9 @@
 url: https://cidm-ph.github.io/phylepic/
 template:
   bootstrap: 5
+  bootswatch: journal
+  theme: solarized-light
+
 reference:
 - title: Phylepic charts
   contents:
