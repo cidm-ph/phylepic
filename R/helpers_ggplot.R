@@ -162,20 +162,3 @@ annotate_and_reraise <- function(panel_name, restart = NULL) {
     }
   }
 }
-
-# The below are inlined from ggplot2 3.5.0
-
-is.waive <- function(x) {
-  inherits(x, "waiver")
-}
-
-ggname <- function(prefix, grob) {
-  grob$name <- grid::grobName(grob, prefix)
-  grob
-}
-
-aes_intersect <- function(aes1, aes2) {
-  aes <- c(as.list(aes1), aes2[!names(aes2) %in% names(aes1)])
-  class(aes) <- "uneval"
-  aes
-}
