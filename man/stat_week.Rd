@@ -33,9 +33,11 @@ option, e.g. \code{options(phylepic.week_start = "Monday")}.}
 ggplot2 stat layer.
 }
 \description{
+\verb{R lifecycle::badge("deprecated")}
 Computes weeks for date data. This is mostly equivalent to
 \code{\link[ggplot2:geom_histogram]{ggplot2::stat_bin()}} with the bins fixed to weeks starting on a particular
-day.
+day. In future this will be removed as phylepic now uses \code{\link[=scale_bin_auto]{scale_bin_auto()}}
+paired with weekly breaks on the date scale instead for greater flexibility.
 }
 \examples{
 library(ggplot2)

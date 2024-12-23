@@ -7,8 +7,9 @@
 plot_epicurve(
   phylepic,
   fill = NULL,
-  weeks = TRUE,
-  week_start = getOption("phylepic.week_start")
+  weeks = FALSE,
+  week_start = getOption("phylepic.week_start"),
+  binned = TRUE
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ Can be specified as a case-insensitive English weekday name such as "Monday"
 or an integer. Since you generally won't want to mix definitions, it is
 more convenient to control this globally with the \code{"phylepic.week_start"}
 option, e.g. \code{options(phylepic.week_start = "Monday")}.}
+
+\item{binned}{When \code{TRUE}, bin the date axis by the scale breaks.}
 }
 \value{
 If \code{phylepic} is specified returns a ggplot, otherwise a function

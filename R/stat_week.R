@@ -1,8 +1,10 @@
 #' Calculate week bins from dates
 #'
+#' `R lifecycle::badge("deprecated")`
 #' Computes weeks for date data. This is mostly equivalent to
 #' [ggplot2::stat_bin()] with the bins fixed to weeks starting on a particular
-#' day.
+#' day. In future this will be removed as phylepic now uses [scale_bin_auto()]
+#' paired with weekly breaks on the date scale instead for greater flexibility.
 #'
 #' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,pad,...
 #'   See [ggplot2::stat_bin()].

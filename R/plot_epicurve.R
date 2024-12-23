@@ -3,6 +3,7 @@
 #' @param phylepic Object of class "phylepic".
 #' @param fill Variable in metadata table to use for the fill aesthetic (tidy-eval).
 #' @param weeks When `TRUE`, bin the date axis by weeks.
+#' @param binned When `TRUE`, bin the date axis by the scale breaks.
 #' @inheritParams week_breaks
 #'
 #' @inherit plot_tree return
@@ -11,31 +12,39 @@
 plot_epicurve <- function(
   phylepic,
   fill = NULL,
-  weeks = TRUE,
-  week_start = getOption("phylepic.week_start")
+  weeks = FALSE,
+  week_start = getOption("phylepic.week_start"),
+  binned = TRUE
 ) {
   wrapper <- function(x) {
     x <- as.data.frame(x)
     stopifnot(is.tip_data(x))
 
-    p <- ggplot2::ggplot(x)
-
-    if (weeks) {
-      p <- p + stat_week(
+    main_layer <- if (weeks) {
+      lifecycle::deprecate_warn(
+        "0.3.0", "plot_epicurve(weeks)",
+        details = "Use plot_epicurve(binned = TRUE) and adjust breaks on the date scale"
+      )
+      stat_week(
         aes(x = .data$.phylepic.date, fill = {{fill}}),
         week_start = week_start
       )
     } else {
-      p <- p + ggplot2::geom_histogram(
-        aes(x = .data$.phylepic.date, fill = {{fill}}),
-        binwidth = 1
+      hist_args <-
+        if (binned) list(stat = StatBinAuto)
+        else list(binwidth = 1)
+      rlang::inject(
+        ggplot2::geom_histogram(
+          aes(x = .data$.phylepic.date, fill = {{fill}}), !!!hist_args
+        )
       )
     }
-
-    p +
-      ggplot2::theme_minimal() +
-      ggplot2::scale_y_continuous(position = "right") +
+    ggplot2::ggplot(x) +
+      main_layer +
+      ggplot2::scale_x_date() +
+      ggplot2::scale_y_continuous(position = "right", expand = ggplot2::expansion(0)) +
       ggplot2::labs(x = NULL, y = NULL) +
+      ggplot2::theme_minimal() +
       theme_plot_epicurve()
   }
 
