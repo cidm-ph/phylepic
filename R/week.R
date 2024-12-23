@@ -57,7 +57,7 @@ floor_week <- function(date) {
   as.Date(cut(date, "1 week", right = TRUE, include.lowest = TRUE))
 }
 
-ceiling_week <- function(date, time) {
+ceiling_week <- function(date) {
   floor_week(date + 7L)
 }
 
