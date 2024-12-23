@@ -135,11 +135,10 @@ autoplot.phylepic <- function(
     if (is.null(plot.calendar)) {
       cli::cli_abort("{.arg plot.calendar} cannot be {.code NULL} if {.arg plot.epicurve} is provided")
     }
-    plot.epicurve <- conform_plot_epicurve(
-      plot.epicurve,
-      scale.date = scale.date,
-      scale.fill = scale.fill
-    )
+    plot.epicurve <- plot.epicurve |>
+      replace_scale(scale.date) |>
+      replace_scale(scale.fill) |>
+      conform_plot_epicurve()
     guides <- c(guides, extract_guides(plot.epicurve))
     relheights <- c(relheights, 1)
   }

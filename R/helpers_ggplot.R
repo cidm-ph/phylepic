@@ -22,6 +22,7 @@ oob_infinite <- function(x, range = c(0, 1)) {
 }
 
 replace_scale <- function(plot, scale) {
+  if (is.null(scale)) return(plot)
   old.scale <- plot$scales$get_scales(scale$aesthetics)
   if (!is.null(old.scale)) {
     prev_aes <- plot$scales$find(scale$aesthetics)
@@ -42,6 +43,51 @@ mutate_scale <- function(plot, aesthetic, default_scale = NULL, f) {
     plot$scales$scales <- plot$scales$scales[!prev_aes]
   }
   plot + f(old.scale)
+}
+
+#' @noRd
+#' @param plot a ggplot plot
+#' @param aesthetic string naming the aes, e.g. `"x"`
+#' @param constructor function that creates the default scale, e.g. `scale_x_continuous`
+#' @param params list of values to set on the scale
+#' @param call override the call when calling this from an internal helper function
+patch_scale <- function(
+  plot, aesthetic, constructor, params = list(),
+  call = rlang::caller_call(), panel_name = "<unknown>"
+) {
+  old.scale <- plot$scales$get_scales(aesthetic)
+  if (is.null(old.scale)) {
+    old.scale <- constructor()
+  } else {
+    # remove the existing scale to prevent scale replacement warning
+    prev_aes <- plot$scales$find(old.scale$aesthetics)
+    plot$scales$scales <- plot$scales$scales[!prev_aes]
+
+    new.class <- class(constructor())
+    if (!inherits(old.scale, new.class[[1]])) {
+      cli::cli_warn(paste0(
+        "Scale is of the wrong type, {.cls {class(old.scale)[[1]]}}; ",
+        "replacing it with new {.cls {new.class[[1]]}}"
+      ), call = call)
+      old.scale <- constructor()
+    }
+  }
+
+  for (k in names(params)) {
+    old.value <- old.scale[[k]]
+    new.value <- params[[k]]
+    if (!identical(old.value , new.value)) {
+      cli::cli_warn(paste0(
+        "Replaced {.val {aesthetic}} scale {.field {k}}: ",
+        "{cli::code_highlight(deparse(old.value))} -> ",
+        "{cli::code_highlight(deparse(new.value))} ",
+        "[phylepic: plot.{panel_name}]"
+      ), call = call)
+      old.scale[[k]] <- new.value
+    }
+  }
+
+  plot + old.scale
 }
 
 warn_theme <- function(plot_theme, ..., .name) {
