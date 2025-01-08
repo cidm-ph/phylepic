@@ -74,13 +74,14 @@ patch_scale <- function(
   }
 
   for (k in names(params)) {
-    old.value <- old.scale[[k]]
+    old.call <- substitute(old.scale)
+    new.call <- substitute(params)
     new.value <- params[[k]]
-    if (!identical(old.value , new.value)) {
+    if (!identical(old.scale[[k]] , new.value)) {
       cli::cli_warn(paste0(
         "Replaced {.val {aesthetic}} scale {.field {k}}: ",
-        "{cli::code_highlight(deparse(old.value))} -> ",
-        "{cli::code_highlight(deparse(new.value))} ",
+        "{cli::code_highlight(deparse1(old.call[[k]]))} -> ",
+        "{cli::code_highlight(deparse1(new.call[[k]]))} ",
         "[phylepic: plot.{panel_name}]"
       ), call = call)
       old.scale[[k]] <- new.value
