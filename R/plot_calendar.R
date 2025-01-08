@@ -58,7 +58,7 @@ plot_calendar <- function(
 
       geom_calendar(
         mapping,
-        stat = StatCalendar,
+        stat = "calendar",
         width = 1L,
         height = 1L,
         na.rm = TRUE,
@@ -116,29 +116,19 @@ theme_plot_calendar <- function() {
   )
 }
 
-conform_plot_calendar <- function(plot, scale.date, scale.fill, n) {
-  # The y scale expansion must match or else the plots won't line up.
-  plot <- mutate_scale(plot, "y", ggplot2::scale_y_continuous(), f = function(scale) {
-    scale$expand <- ggplot2::expansion(add = 0)
-    scale$limits <- c(-0.5, n - 0.5)
-    scale
-  })
+conform_plot_calendar <- function(plot, n) {
+  plot <- patch_scale(
+    plot, "x", ggplot2::scale_x_date, list(
+    position = "bottom"
+  ), panel_name = "calendar", call = rlang::caller_call())
 
-  if (!is.null(scale.date)) {
-    plot <- replace_scale(plot, scale.date)
-    plot <- mutate_scale(plot, "x", f = function(scale) {
-      scale$position <- "top"
-      scale
-    })
-  }
-
-  if (!is.null(scale.fill)) {
-    plot <- plot + scale.fill
-  }
-
-  if (! inherits(plot$scales$get_scales("x"), "ScaleContinuousDate")) {
-    cli::cli_abort(c("x" = "{.arg plot.calendar} does not have a date scale for {.field x}"))
-  }
+  plot <- patch_scale(
+    plot, "y", ggplot2::scale_y_continuous, list(
+      # the documented default is 5% expansion, so replace now
+      expand = ggplot2::expansion(0),
+      limits = c(-0.5, n - 0.5)
+    ), panel_name = "calendar", call = rlang::caller_call()
+  )
 
   plot <- plot + ggplot2::theme(legend.position = "none")
   annotate_conditions_with_panel(plot, "calendar")

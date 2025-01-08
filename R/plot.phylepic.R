@@ -118,12 +118,10 @@ autoplot.phylepic <- function(
 
   plot.calendar <- apply_plot(plot.calendar, object)
   if (!is.null(plot.calendar)) {
-    plot.calendar <- conform_plot_calendar(
-      plot.calendar,
-      scale.date = scale.date,
-      scale.fill = scale.fill,
-      n = nrow(as.data.frame(object))
-    )
+    plot.calendar <- plot.calendar |>
+      replace_scale(scale.date) |>
+      replace_scale(scale.fill) |>
+      conform_plot_calendar(n = nrow(as.data.frame(object)))
     guides <- c(guides, extract_guides(plot.calendar))
     relwidths <- c(relwidths, width.date)
     pos.calendar <- length(hplotlist) + 1
