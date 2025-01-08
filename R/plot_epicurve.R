@@ -2,9 +2,11 @@
 #'
 #' @param phylepic Object of class "phylepic".
 #' @param fill Variable in metadata table to use for the fill aesthetic (tidy-eval).
-#' @param weeks When `TRUE`, bin the date axis by weeks.
+#' @param weeks `r lifecycle::badge("deprecated")`
+#'   When `TRUE`, bin the date axis by weeks.
+#'   Replaced by `binned = TRUE` paired with a suitable date scale.
+#' @param week_start `r lifecycle::badge("deprecated")` See [week_breaks()].
 #' @param binned When `TRUE`, bin the date axis by the scale breaks.
-#' @inheritParams week_breaks
 #'
 #' @inherit plot_tree return
 #' @family phylepic plots

@@ -1,8 +1,11 @@
 #' Calculate week bins with additional binning in the y axis
 #'
+#' `R lifecycle::badge("deprecated")`
 #' Computes week bins for date data in the x aesthetic, and allows
 #' the binning to be specified for the y aesthetic. This is mostly equivalent to
 #' [ggplot2::stat_bin_2d()] with the x aesthetic handling fixed to weeks.
+#' In future this will be removed as phylepic now uses [scale_bin_2d_auto()]
+#' paired with weekly breaks on the date scale instead for greater flexibility.
 #'
 #' The computed aesthetics are similar to those of `stat_bin_2d()`, including
 #' `after_stat(count)`, `after_stat(density)`, and the bin positions and sizes:
@@ -269,16 +272,5 @@ make_bins <- function(
       boundary = boundary,
       closed = closed
     )
-  }
-}
-
-ulevels <- function(x) {
-  if (is.factor(x)) {
-    x <- addNA(x, TRUE)
-    factor(levels(x), levels(x), exclude = NULL)
-  } else if (is.null(x)) {
-    x
-  } else {
-    sort(vctrs::vec_unique(x))
   }
 }

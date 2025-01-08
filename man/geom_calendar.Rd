@@ -40,6 +40,10 @@ of the scale. This is intended to work with a scale configured to use
 The triangles are drawn with their base (vertical edge) sitting on the scale
 limit, and their width equal to half of the median bin width.
 
+If a binning stat is desired, use \code{\link[=stat_calendar]{stat_calendar()}}. This ensures that the
+original date value for each row is propagated through binning (without which
+the labels will be wrong), and that the infinte values are not dropped.
+
 Note that the \code{label} aesthetic will be dropped if the data are not grouped
 in the expected way. In general this means that all rows contributing to a
 given bin must have the same value for the \code{label} aesthetic.
@@ -56,9 +60,9 @@ ggplot(df) +
     geom_calendar(
         aes(date, value, label = after_stat(count)),
         colour = "white",
-        stat = "week_2d",
-        week_start = "Monday",
-        bins.y = 10
+        stat = "calendar",
+        breaks = list(week_breaks(week_start = "Monday"), NULL),
+        bins = list(NULL, 10)
     ) +
     scale_x_week(
         limits = as.Date(c("2024-01-08", NA)),

@@ -29,8 +29,8 @@ stat_bin_auto <- function(
   data = NULL,
   geom = "bar",
   position = "stack",
-  breaks = "all",
   ...,
+  breaks = "all",
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE,
@@ -80,13 +80,8 @@ StatBinAuto <- ggplot2::ggproto("StatBinAuto", ggplot2::StatBin,
     binwidth = NULL, bins = NULL, boundary = NULL, centre = NULL
   ) {
     x <- ggplot2::flipped_names(flipped_aes)$x
-    major_breaks <- scales[[x]]$get_breaks()
-    minor_breaks <- scales[[x]]$get_breaks_minor()
-    breaks <- switch(breaks,
-                     minor = minor_breaks,
-                     major = major_breaks,
-                     all = unique(sort(c(minor_breaks, major_breaks))))
-    breaks <- scales[[x]]$get_transformation()$inverse(breaks)
+    breaks <- breaks_from_scale(breaks, scales[[x]])
+
     ggplot2::StatBin$compute_group(
       data, scales, breaks = breaks, flipped_aes = flipped_aes, pad = pad,
       closed = closed, ...

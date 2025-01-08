@@ -164,8 +164,9 @@ bin_vector <- function(x, bins, weight = NULL, pad = FALSE) {
     weight[is.na(weight)] <- 0
   }
 
-  bin_idx <- cut(x, bins$fuzzy, right = bins$right_closed,
-    include.lowest = TRUE)
+  #@bin_idx <- cut(x, bins$fuzzy, right = bins$right_closed,
+  #@  include.lowest = TRUE)
+  bin_idx <- bin_cut(x, bins) #@
   bin_count <- as.numeric(tapply(weight, bin_idx, sum, na.rm = TRUE))
   bin_count[is.na(bin_count)] <- 0
 
@@ -211,3 +212,79 @@ bin_out <- function(count = integer(0), x = numeric(0), width = numeric(0),
     .name_repair = "minimal"#@
   )
 }
+
+# ------------------------------------------------------------------------
+# The remainder of the file is reproduced from the unreleased ggplot2 code
+# available at https://github.com/tidyverse/ggplot2/pull/6212/
+
+compute_bins <- function(x, scale = NULL, breaks = NULL, binwidth = NULL, bins = NULL,
+                         center = NULL, boundary = NULL,
+                         closed = c("right", "left")) {
+
+  range <- if (is.scale(scale)) scale$dimension() else range(x)
+  #@ check_length(range, 2L)
+
+  if (!is.null(breaks)) {
+    breaks <- allow_lambda(breaks)
+    if (is.function(breaks)) {
+      breaks <- breaks(x)
+    }
+    if (is.scale(scale) && !scale$is_discrete()) {
+      breaks <- scale$transform(breaks)
+    }
+    #@ check_numeric(breaks)
+    bins <- bin_breaks(breaks, closed)
+    return(bins)
+  }
+
+  #@ check_number_decimal(boundary, allow_infinite = FALSE, allow_null = TRUE)
+  #@ check_number_decimal(center, allow_infinite = FALSE, allow_null = TRUE)
+  if (!is.null(boundary) && !is.null(center)) {
+    cli::cli_abort("Only one of {.arg boundary} and {.arg center} may be specified.")
+  }
+
+  if (!is.null(binwidth)) {
+    binwidth <- allow_lambda(binwidth)
+    if (is.function(binwidth)) {
+      binwidth <- binwidth(x)
+    }
+    #@ check_number_decimal(binwidth, min = 0, allow_infinite = FALSE)
+    bins <- bin_breaks_width(
+      range, binwidth,
+      center = center, boundary = boundary, closed = closed
+    )
+    return(bins)
+  }
+
+  bins <- allow_lambda(bins)
+  if (is.function(bins)) {
+    bins <- bins(x)
+  }
+  #@ check_number_whole(bins, min = 1, allow_infinite = FALSE)
+  bin_breaks_bins(
+    range, bins,
+    center = center, boundary = boundary, closed = closed
+  )
+}
+
+bin_cut <- function(x, bins) {
+  cut(x, bins$fuzzy, right = bins$right_closed, include.lowest = TRUE)
+}
+
+bin_loc <- function(x, id) {
+  left <- x[-length(x)]
+  right <- x[-1]
+
+  list(
+    left = left[id],
+    right = right[id],
+    mid = ((left + right) / 2)[id],
+    length = diff(x)[id]
+  )
+}
+
+allow_lambda <- function(x) {
+ if (rlang::is_formula(x)) rlang::as_function(x) else x
+}
+
+is.scale <- function(x) inherits(x, "Scale")

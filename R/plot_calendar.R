@@ -2,8 +2,11 @@
 #'
 #' @param phylepic Object of class "phylepic".
 #' @param fill Variable in metadata table to use for the fill aesthetic (tidy-eval).
-#' @param weeks When `TRUE`, bin the date axis by weeks.
-#' @inheritParams week_breaks
+#' @param weeks `r lifecycle::badge("deprecated")`
+#'   When `TRUE`, bin the date axis by weeks.
+#'   Replaced by `binned = TRUE` paired with a suitable date scale.
+#' @param week_start `r lifecycle::badge("deprecated")` See [week_breaks()].
+#' @param binned When `TRUE`, bin the date axis by the scale breaks.
 #' @param labels Controls the format of date labels on calendar tiles.
 #'   If `NULL`, no labels are drawn.
 #'   If a character scalar, controls the date format (see [`strptime()`]).
@@ -15,8 +18,9 @@
 plot_calendar <- function(
   phylepic,
   fill = NULL,
-  weeks = TRUE,
+  weeks = FALSE,
   week_start = getOption("phylepic.week_start"),
+  binned = TRUE,
   labels = NULL,
   labels.params = list(size = 3, fontface = "bold", colour = "white")
 ) {
@@ -26,18 +30,18 @@ plot_calendar <- function(
 
     mapping <- aes(fill = {{fill}})
 
-    p <- ggplot2::ggplot(x, aes(
-      y = .data$.phylepic.index,
-      x = .data$.phylepic.date
-    ))
+    main_layer <- if (weeks) {
+      lifecycle::deprecate_warn(
+        "0.3.0", "plot_epicurve(weeks)",
+        details = "Use plot_epicurve(binned = TRUE) and adjust breaks on the date scale"
+      )
 
-    if (weeks) {
       if (!is.null(labels)) {
         mapping2 <- aes(label = format(ggplot2::after_stat(.data$xorig), labels))
         mapping$label <- mapping2$label
       }
 
-      p <- p + stat_week_2d(
+      stat_week_2d(
         mapping = mapping,
         week_start = week_start,
         binwidth.y = 1L,
@@ -46,13 +50,30 @@ plot_calendar <- function(
         linewidth = 0.3,
         label_params = labels.params
       )
+    } else if (binned) {
+      if (!is.null(labels)) {
+        mapping2 <- aes(label = format(ggplot2::after_stat(.data$xorig), labels))
+        mapping$label <- mapping2$label
+      }
+
+      geom_calendar(
+        mapping,
+        stat = StatCalendar,
+        width = 1L,
+        height = 1L,
+        na.rm = TRUE,
+        linewidth = 0.3,
+        label_params = labels.params,
+        breaks = list("all", NULL),
+        binwidth = list(NULL, 1L)
+      )
     } else {
       if (!is.null(labels)) {
         mapping2 <- aes(label = format(ggplot2::after_stat(x), labels))
         mapping$label <- mapping2$label
       }
 
-      p <- p + geom_calendar(
+      geom_calendar(
         mapping,
         width = 1L,
         height = 1L,
@@ -62,7 +83,11 @@ plot_calendar <- function(
       )
     }
 
-    p +
+    ggplot2::ggplot(x, aes(
+      y = .data$.phylepic.index,
+      x = .data$.phylepic.date
+    )) +
+      main_layer +
       ggplot2::scale_y_continuous(
         expand = ggplot2::expansion(add = 0),
         limits = c(-0.5, nrow(x) - 0.5)

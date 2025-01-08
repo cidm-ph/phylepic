@@ -7,8 +7,9 @@
 plot_calendar(
   phylepic,
   fill = NULL,
-  weeks = TRUE,
+  weeks = FALSE,
   week_start = getOption("phylepic.week_start"),
+  binned = TRUE,
   labels = NULL,
   labels.params = list(size = 3, fontface = "bold", colour = "white")
 )
@@ -18,13 +19,13 @@ plot_calendar(
 
 \item{fill}{Variable in metadata table to use for the fill aesthetic (tidy-eval).}
 
-\item{weeks}{When \code{TRUE}, bin the date axis by weeks.}
+\item{weeks}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}
+When \code{TRUE}, bin the date axis by weeks.
+Replaced by \code{binned = TRUE} paired with a suitable date scale.}
 
-\item{week_start}{Day the week begins (defaults to Monday).
-Can be specified as a case-insensitive English weekday name such as "Monday"
-or an integer. Since you generally won't want to mix definitions, it is
-more convenient to control this globally with the \code{"phylepic.week_start"}
-option, e.g. \code{options(phylepic.week_start = "Monday")}.}
+\item{week_start}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} See \code{\link[=week_breaks]{week_breaks()}}.}
+
+\item{binned}{When \code{TRUE}, bin the date axis by the scale breaks.}
 
 \item{labels}{Controls the format of date labels on calendar tiles.
 If \code{NULL}, no labels are drawn.

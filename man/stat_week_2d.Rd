@@ -40,9 +40,12 @@ option, e.g. \code{options(phylepic.week_start = "Monday")}.}
 ggplot2 stat layer.
 }
 \description{
+\verb{R lifecycle::badge("deprecated")}
 Computes week bins for date data in the x aesthetic, and allows
 the binning to be specified for the y aesthetic. This is mostly equivalent to
 \code{\link[ggplot2:geom_bin_2d]{ggplot2::stat_bin_2d()}} with the x aesthetic handling fixed to weeks.
+In future this will be removed as phylepic now uses \code{\link[=scale_bin_2d_auto]{scale_bin_2d_auto()}}
+paired with weekly breaks on the date scale instead for greater flexibility.
 }
 \details{
 The computed aesthetics are similar to those of \code{stat_bin_2d()}, including

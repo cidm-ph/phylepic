@@ -22,6 +22,11 @@ reference:
   - stat_week_2d
   - week_breaks
   - oob_infinite
+- title: Automatic binning
+  contents:
+  - stat_bin_auto
+  - stat_bin_2d_auto
+  - breaks_cached
 - title: Phylogenetic tree drawing
   contents:
   - coord_tree

@@ -34,3 +34,44 @@ aes_intersect <- function(aes1, aes2) {
   class(aes) <- "uneval"
   aes
 }
+
+dual_param <- function(x, default = list(x = NULL, y = NULL)) {
+  if (is.null(x)) {
+    default
+  } else if (length(x) == 2) {
+    if (is.list(x) && !is.null(names(x))) {
+      x
+    } else {
+      list(x = x[[1]], y = x[[2]])
+    }
+  } else {
+    list(x = x, y = x)
+  }
+}
+
+unique0 <- function(x, ...) if (is.null(x)) x else vctrs::vec_unique(x, ...)
+
+ulevels <- function(x, na.last = TRUE) {
+  if (is.factor(x)) {
+    x <- addNA(x, TRUE)
+    factor(levels(x), levels(x), exclude = NULL)
+  } else {
+    sort(unique0(x), na.last = na.last)
+  }
+}
+
+tapply_df <- function(x, index, fun, ..., drop = TRUE) {
+  labels <- lapply(index, ulevels, na.last = NA) # drop NA
+  out <- expand.grid(labels, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
+
+  grps <- split(x, index)
+  names(grps) <- NULL
+  out$value <- unlist(lapply(grps, fun, ...))
+
+  if (drop) {
+    n <- lengths(grps)
+    out <- out[n > 0, , drop = FALSE]
+  }
+
+  out
+}

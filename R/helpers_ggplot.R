@@ -208,3 +208,13 @@ annotate_and_reraise <- function(panel_name, restart = NULL) {
     }
   }
 }
+
+breaks_from_scale <- function(breaks, scale) {
+  major_breaks <- scale$get_breaks()
+  minor_breaks <- scale$get_breaks_minor()
+  breaks <- switch(breaks,
+                   minor = minor_breaks,
+                   major = major_breaks,
+                   all = unique(sort(c(minor_breaks, major_breaks))))
+  scale$get_transformation()$inverse(breaks)
+}
