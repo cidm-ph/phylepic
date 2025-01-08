@@ -61,7 +61,7 @@ plot_tree <- function(phylepic, label = .data$name, bootstrap = TRUE) {
     p +
       ggplot2::scale_x_continuous(
         expand = ggplot2::expansion(mult = c(0, 0.2)),
-        transform = "reverse"
+        transform = scales::transform_reverse()
       ) +
       ggplot2::scale_y_continuous(expand = ggplot2::expansion(add = 0.5)) +
       theme_plot_tree() +
@@ -85,24 +85,20 @@ theme_plot_tree <- function() {
 
 conform_plot_tree <- function(plot) {
   # The y scale expansion must match or else the plots won't line up.
-  plot <- mutate_scale(plot, "y", ggplot2::scale_y_continuous(), f = function(scale) {
-    scale$expand <- ggplot2::expansion(add = 0.5)
-    scale
-  })
+  plot <- patch_scale(
+    plot, "y", ggplot2::scale_y_continuous, list(
+    expand = ggplot2::expansion(add = 0.5)
+  ), panel_name = "tree", call = rlang::caller_call())
 
   if (!inherits(plot$coordinate, "CoordTree")) {
     cli::cli_inform("adding {.fn coord_tree} to {.arg plot.tree}")
     plot <- plot + coord_tree()
   }
 
-  scale.x <- plot$scales$get_scales("x")
-  if (scale.x$trans$name != "reverse") {
-    cli::cli_inform("adding {.fn scales::reverse_trans} to {.arg plot.tree}")
-    plot <- mutate_scale(plot, "x", ggplot2::scale_x_continuous(), f = function(scale) {
-      scale$trans <- scales::reverse_trans()
-      scale
-    })
-  }
+  plot <- patch_scale(
+    plot, "x", ggplot2::scale_x_continuous, list(
+    trans = scales::transform_reverse()
+  ), panel_name = "tree", call = rlang::caller_call())
 
   lo_errors <- c()
   if (! inherits(plot$data, "layout_tbl_graph")) {

@@ -31,20 +31,6 @@ replace_scale <- function(plot, scale) {
   plot + scale
 }
 
-mutate_scale <- function(plot, aesthetic, default_scale = NULL, f) {
-  f <- rlang::as_function(f)
-
-  old.scale <- plot$scales$get_scales(aesthetic)
-  if (is.null(old.scale)) {
-    if (is.null(default_scale)) return(plot)
-    old.scale <- default_scale
-  } else {
-    prev_aes <- plot$scales$find(old.scale$aesthetics)
-    plot$scales$scales <- plot$scales$scales[!prev_aes]
-  }
-  plot + f(old.scale)
-}
-
 #' @noRd
 #' @param plot a ggplot plot
 #' @param aesthetic string naming the aes, e.g. `"x"`
@@ -77,7 +63,7 @@ patch_scale <- function(
     old.call <- substitute(old.scale)
     new.call <- substitute(params)
     new.value <- params[[k]]
-    if (!identical(old.scale[[k]] , new.value)) {
+    if (!identical(old.scale[[k]] , new.value, ignore.environment = TRUE)) {
       cli::cli_warn(paste0(
         "Replaced {.val {aesthetic}} scale {.field {k}}: ",
         "{cli::code_highlight(deparse1(old.call[[k]]))} -> ",

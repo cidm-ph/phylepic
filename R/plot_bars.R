@@ -110,10 +110,10 @@ theme_plot_bars <- function() {
 
 conform_plot_bars <- function(plot) {
   # The y scale expansion must match or else the plots won't line up.
-  plot <- mutate_scale(plot, "y", ggplot2::scale_y_continuous(), f = function(scale) {
-    scale$expand <- ggplot2::expansion(add = 0)
-    scale
-  })
+  plot <- patch_scale(
+    plot, "y", ggplot2::scale_y_continuous, list(
+    expand = ggplot2::expansion(0)
+  ), panel_name = "bars", call = rlang::caller_call())
 
   plot <- plot + ggplot2::theme(legend.position = "none")
   annotate_conditions_with_panel(plot, "bars")
