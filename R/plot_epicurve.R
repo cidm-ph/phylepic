@@ -44,7 +44,11 @@ plot_epicurve <- function(
     ggplot2::ggplot(x) +
       main_layer +
       ggplot2::scale_x_date() +
-      ggplot2::scale_y_continuous(position = "right", expand = ggplot2::expansion(0)) +
+      ggplot2::scale_y_continuous(
+        position = "right",
+        expand = ggplot2::expansion(0),
+        breaks = scales::breaks_extended(Q = c(1, 5, 2, 4, 3))
+      ) +
       ggplot2::labs(x = NULL, y = NULL) +
       ggplot2::theme_minimal() +
       theme_plot_epicurve()
