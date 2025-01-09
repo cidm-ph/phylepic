@@ -1,9 +1,9 @@
 #' @export
-#' @rdname stat_bin_2d_auto
+#' @rdname geom_calendar
 stat_calendar <- function(
     mapping = NULL,
     data = NULL,
-    geom = "tile",
+    geom = "calendar",
     position = "identity",
     ...,
     breaks = "all",
@@ -36,9 +36,17 @@ stat_calendar <- function(
 #' @export
 #' @usage NULL
 #' @format NULL
-#' @rdname stat_bin_2d_auto
-StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::StatBin2d,
-  dropped_aes = c("weight", "inf"),
+#' @rdname geom_calendar
+StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::Stat,
+  required_aes = c("x", "y"),
+
+  setup_data = function(self, data, params) {
+    if (any(duplicated(data$y))) {
+      cli::cli_abort("Data contains duplicated {.field y} values")
+    }
+
+    data
+  },
 
   setup_params = function(self, data, params) {
     if (is.character(params$drop)) {
@@ -58,13 +66,6 @@ StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::StatBin2d,
     binwidth = NULL, bins = 30, breaks = NULL, origin = NULL, drop = TRUE,
     boundary = 0, closed = NULL, center = NULL
   ) {
-    if (!inherits(scales$x, "ScaleContinuousDate")) {
-      cli::cli_abort(c(
-        "{.fn stat_calendar} only works with date {.val x} scales",
-        "x" = "Scale for aesthetic {.val x} is {.cls {class(scales$x)}}"
-      ))
-    }
-
     bins <- dual_param(bins, list(x = 30, y = 30))
     if (!is.null(breaks$x) && is.character(breaks$x)) {
       breaks$x <- breaks_from_scale(breaks$x, scales$x)
@@ -72,8 +73,6 @@ StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::StatBin2d,
     if (!is.null(breaks$y) && is.character(breaks$y)) {
       breaks$y <- breaks_from_scale(breaks$y, scales$y)
     }
-
-    if (is.null(data$weight)) data$weight <- 1
 
     xbin <- compute_bins(
       data$x, scales$x, breaks$x, binwidth$x, bins$x,
@@ -88,22 +87,15 @@ StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::StatBin2d,
       ybin = as.integer(bin_cut(data$y, ybin))
     )
 
-    out <- tapply_df(data$weight, cut_id, sum, drop = drop)
+    xdim <- bin_loc_with_overflow(xbin$breaks, cut_id$xbin)
+    data$xmin <- xdim$left
+    data$xmax <- xdim$right
 
-    xdim <- bin_loc_with_overflow(xbin$breaks, out$xbin)
-    out$x <- xdim$mid
-    out$width <- xdim$length
+    ydim <- bin_loc(ybin$breaks, cut_id$ybin)
+    data$ymin <- ydim$left
+    data$ymax <- ydim$right
 
-    ydim <- bin_loc(ybin$breaks, out$ybin)
-    out$y <- ydim$mid
-    out$height <- ydim$length
-
-    if (!any(duplicated(out$y)) & all(out$y %in% data$y)) {
-      idx <- match(out$y, data$y)
-      out$xorig <- scales::date_trans()$inverse(data$x[idx])
-    }
-
-    out
+    data
   }
 )
 

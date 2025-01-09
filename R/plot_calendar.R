@@ -52,13 +52,12 @@ plot_calendar <- function(
       )
     } else if (binned) {
       if (!is.null(labels)) {
-        mapping2 <- aes(label = format(ggplot2::after_stat(.data$xorig), labels))
+        mapping2 <- aes(label = ggplot2::after_stat(format(structure(x, class = "Date"), labels)))
         mapping$label <- mapping2$label
       }
 
       geom_calendar(
         mapping,
-        stat = "calendar",
         width = 1L,
         height = 1L,
         na.rm = TRUE,
@@ -75,6 +74,7 @@ plot_calendar <- function(
 
       geom_calendar(
         mapping,
+        stat = "identity",
         width = 1L,
         height = 1L,
         na.rm = TRUE,

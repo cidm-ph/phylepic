@@ -60,18 +60,8 @@ ulevels <- function(x, na.last = TRUE) {
   }
 }
 
-tapply_df <- function(x, index, fun, ..., drop = TRUE) {
-  labels <- lapply(index, ulevels, na.last = NA) # drop NA
-  out <- expand.grid(labels, KEEP.OUT.ATTRS = FALSE, stringsAsFactors = FALSE)
-
-  grps <- split(x, index)
-  names(grps) <- NULL
-  out$value <- unlist(lapply(grps, fun, ...))
-
-  if (drop) {
-    n <- lengths(grps)
-    out <- out[n > 0, , drop = FALSE]
-  }
-
-  out
+allow_lambda <- function(x) {
+ if (rlang::is_formula(x)) rlang::as_function(x) else x
 }
+
+is.scale <- function(x) inherits(x, "Scale")

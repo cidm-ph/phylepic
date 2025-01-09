@@ -3,37 +3,19 @@
 #' @usage NULL
 #' @importFrom rlang %||%
 #' @export
-GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
-  default_aes = aes(fill = "grey20", colour = NA, linewidth = 0.1, linetype = 1,
-                    alpha = NA, width = NA, height = NA),
-  required_aes = c("x", "y"),
+GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomRect,
+  default_aes = aes(
+    fill = "grey20", colour = NA, linewidth = 0.1, linetype = 1,
+    alpha = NA, width = NA, height = NA
+  ),
   optional_aes = c("label"),
-  non_missing_aes = c("xmin", "xmax", "ymin", "ymax"),
-  extra_params = c("na.rm"),
-  rename_size = TRUE,
-  draw_key = ggplot2::draw_key_polygon,
-
-  setup_data = function(data, params) {
-    data$width <- data$width %||%
-      params$width %||%
-      ggplot2::resolution(data$x, FALSE)
-    data$height <- data$height %||%
-      params$height %||%
-      ggplot2::resolution(data$y, FALSE)
-
-    transform(
-      data,
-      xmin = x - width / 2,  xmax = x + width / 2,  width = NULL,
-      ymin = y - height / 2, ymax = y + height / 2, height = NULL
-    )
-  },
 
   draw_panel = function(
     self, data, panel_params, coord, lineend = "butt", linejoin = "mitre",
     label_params = list(colour = "grey30")
   ) {
-    inf <- data[is.infinite(data$x), ]
-    data <- data[is.finite(data$x), ]
+    inf <- data[is.infinite(data$xmin) | is.infinite(data$xmax), ]
+    data <- data[is.finite(data$xmin) & is.finite(data$xmax), ]
     coords <- coord$transform(data, panel_params)
 
     tiles <- grid::rectGrob(
@@ -63,6 +45,7 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 
     grobs <- if ("label" %in% colnames(data)) {
       text_data <- ggplot2::GeomText$use_defaults(data, label_params)
+      text_data$x <- (text_data$xmin + text_data$xmax) / 2
       labels <- ggplot2::GeomText$draw_panel(text_data, panel_params, coord)
       grid::gList(tiles, labels)
     } else {
@@ -70,16 +53,20 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
     }
 
     if (nrow(inf) > 0) {
-      width <- median(data$xmax - data$xmin, na.rm = TRUE) / 2
+      width <- min(
+        median(data$xmax - data$xmin, na.rm = TRUE) / 2,
+        median(data$ymax - data$ymin, na.rm = TRUE) * 2
+      )
       x_range <- coord$limits$x %||% panel_params$x$scale$limits
 
-      inf$xmin <- ifelse(inf$x < 0, x_range[[1]] - width, x_range[[2]])
-      inf$xmax <- ifelse(inf$x < 0, x_range[[1]], x_range[[2]] + width)
-      inf$x <- ifelse(inf$x < 0, inf$xmax, inf$xmin)
+      sign <- ifelse(is.infinite(inf$xmin), inf$xmin, inf$xmax)
+      inf$x <- ifelse(sign < 0, inf$xmax, inf$xmin)
+      inf$xmin <- ifelse(sign < 0, x_range[[1]] - width, x_range[[2]])
+      inf$xmax <- ifelse(sign < 0, x_range[[1]], x_range[[2]] + width)
       inf <- coord$transform(inf, panel_params)
 
-      x_tip <- ifelse(inf$x == inf$xmin, inf$xmax, inf$xmin)
-      x_base <- ifelse(inf$x == inf$xmin, inf$xmin, inf$xmax)
+      x_tip <- ifelse(sign > 0, inf$xmax, inf$xmin)
+      x_base <- ifelse(sign > 0, inf$xmin, inf$xmax)
       arr_fill <- ggplot2::fill_alpha(inf$fill, inf$alpha)
       arr_colour <- inf$colour
       arr_blank <- is.na(inf$colour) & is.na(arr_fill)
@@ -111,9 +98,9 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 
 )
 
-#' Specialised tile geometry for calendar plots
+#' Specialised rectangular geometry for calendar plots
 #'
-#' This geom behaves mostly the same as [ggplot2::geom_tile()] with a few
+#' This geom behaves mostly the same as [ggplot2::geom_rect()] with a few
 #' additions. Firstly, the `label` aesthetic is supported to draw text on top of
 #' the tiles. Secondly, out of bounds values can be drawn as arrows at the edge
 #' of the scale (see details below).
@@ -121,14 +108,18 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 #' Any `x` values that are infinite (i.e. `-Inf` or `Inf`) would normally be
 #' dropped by ggplot's layers. If any such values survive the stat processing,
 #' they will be drawn by `geom_calendar()` as triangles at the respective edges
-#' of the scale. This is intended to work with a scale configured to use
-#' [oob_infinite()] for out of bounds handling.
+#' of the scale.
 #' The triangles are drawn with their base (vertical edge) sitting on the scale
-#' limit, and their width equal to half of the median bin width.
+#' limit, and their width is determined based on the tile size..
+#' If you want to use this feature, you need to use the correct `oob` setting on
+#' the date scale as well as a compatible stat, e.g.:
+#'
+#'   - when binning, `stat = "calendar` with [scales::oob_keep()],
+#'   - otherwise, `stat = "identity"` with [oob_infinite()].
 #'
 #' If a binning stat is desired, use [stat_calendar()]. This ensures that the
 #' original date value for each row is propagated through binning (without which
-#' the labels will be wrong), and that the infinte values are not dropped.
+#' the labels will be wrong).
 #'
 #' Note that the `label` aesthetic will be dropped if the data are not grouped
 #' in the expected way. In general this means that all rows contributing to a
@@ -149,21 +140,36 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomTile,
 #' df <- data.frame(date = events, value = values)
 #'
 #' ggplot(df) +
-#'     geom_calendar(
-#'         aes(date, value, label = after_stat(count)),
-#'         colour = "white",
-#'         stat = "calendar",
-#'         breaks = list(week_breaks(week_start = "Monday"), NULL),
-#'         bins = list(NULL, 10)
-#'     ) +
-#'     scale_x_week(
-#'         limits = as.Date(c("2024-01-08", NA)),
-#'         expand = expansion(add = 3.5)
-#'     )
+#'   stat_calendar(
+#'       aes(date, value, label = after_stat(count)),
+#'       colour = "white",
+#'       breaks = list(x = "all", y = NULL),
+#'       bins = list(x = NULL, y = 10)
+#'   ) +
+#'   scale_x_date(
+#'       breaks = week_breaks(2L),
+#'       minor_breaks = week_breaks(1L),
+#'       limits = as.Date(c("2024-01-08", NA)),
+#'       expand = expansion(add = 3.5)
+#'   )
+#'
+#' ggplot(tail(df)) +
+#'   geom_calendar(
+#'       aes(date, value),
+#'       colour = "white",
+#'       stat = "identity",
+#'   ) +
+#'   scale_x_date(
+#'       breaks = week_breaks(1L),
+#'       date_minor_breaks = "1 day",
+#'       oob = oob_infinite,
+#'       limits = as.Date(c("2024-01-08", NA)),
+#'       expand = expansion(add = 3.5)
+#'   )
 geom_calendar <- function(
   mapping = NULL,
   data = NULL,
-  stat = "identity",
+  stat = "calendar",
   position = "identity",
   ...,
   linejoin = "mitre",

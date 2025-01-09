@@ -282,9 +282,3 @@ bin_loc <- function(x, id) {
     length = diff(x)[id]
   )
 }
-
-allow_lambda <- function(x) {
- if (rlang::is_formula(x)) rlang::as_function(x) else x
-}
-
-is.scale <- function(x) inherits(x, "Scale")
