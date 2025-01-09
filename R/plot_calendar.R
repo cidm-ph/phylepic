@@ -30,25 +30,23 @@ plot_calendar <- function(
 
     mapping <- aes(fill = {{fill}})
 
-    main_layer <- if (weeks) {
+    cal_args <- if (weeks) {
       lifecycle::deprecate_warn(
         "0.3.0", "plot_epicurve(weeks)",
         details = "Use plot_epicurve(binned = TRUE) and adjust breaks on the date scale"
       )
-
       if (!is.null(labels)) {
-        mapping2 <- aes(label = format(ggplot2::after_stat(.data$xorig), labels))
+        mapping2 <- aes(label = ggplot2::after_stat(format(structure(x, class = "Date"), labels)))
         mapping$label <- mapping2$label
       }
 
-      stat_week_2d(
+      list(
         mapping = mapping,
-        week_start = week_start,
-        binwidth.y = 1L,
-        na.rm = TRUE,
-        geom = "calendar",
-        linewidth = 0.3,
-        label_params = labels.params
+        breaks = list(
+          x = week_breaks(week_start = week_start)(range(x$.phylepic.date, na.rm = TRUE)),
+          y = NULL
+        ),
+        binwidth = list(x = NULL, y = 1L)
       )
     } else if (binned) {
       if (!is.null(labels)) {
@@ -56,16 +54,14 @@ plot_calendar <- function(
         mapping$label <- mapping2$label
       }
 
-      geom_calendar(
-        mapping,
-        na.rm = TRUE,
-        linewidth = 0.3,
-        label_params = labels.params,
+      list(
+        mapping = mapping,
         overflow = list(x = TRUE, y = FALSE),
         breaks = list(x = "all", y = NULL),
         binwidth = list(x = NULL, y = 1L)
       )
-    } else {
+    }
+    else {
       if (!is.null(labels)) {
         mapping2 <- aes(
           label = format(ggplot2::after_stat(x), labels),
@@ -73,13 +69,9 @@ plot_calendar <- function(
         mapping$label <- mapping2$label
       }
 
-      geom_calendar(
-        mapping,
-        stat = "identity",
-        binwidth = 1L,
-        na.rm = TRUE,
-        linewidth = 0.3,
-        label_params = labels.params
+      list(
+        mapping = mapping,
+        binwidth = 1L
       )
     }
 
@@ -87,7 +79,14 @@ plot_calendar <- function(
       y = .data$.phylepic.index,
       x = .data$.phylepic.date
     )) +
-      main_layer +
+      rlang::inject(
+        geom_calendar(
+          label_params = labels.params,
+          linewidth = 0.3,
+          na.rm = TRUE,
+          !!!cal_args
+        )
+      ) +
       ggplot2::scale_y_continuous(
         expand = ggplot2::expansion(add = 0),
         limits = c(-0.5, nrow(x) - 0.5)

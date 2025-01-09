@@ -14,17 +14,18 @@ reference:
   - plot_calendar
   - plot_epicurve
   - plot_tree
-- title: Week-binned dates
+- title: Calendar drawing
   contents:
   - geom_calendar
-  - scale_x_week
-  - stat_week_2d
-  - week_breaks
+  - stat_bin_location
   - oob_infinite
+- title: Week binning
+  contents:
+  - scale_x_week
+  - week_breaks
 - title: Automatic binning
   contents:
   - stat_bin_auto
-  - stat_bin_location
   - stat_bin_2d_auto
   - breaks_cached
 - title: Phylogenetic tree drawing

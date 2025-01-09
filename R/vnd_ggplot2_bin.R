@@ -1,4 +1,4 @@
-# This file was taken from ggplot2 version 4.5.0. It is unchanged from the
+# This file was extracted from ggplot2 version 4.5.0. It is unchanged from the
 # original except for commenting out print.ggplot2_bins and some internal
 # ggplot2 numeric checks or namespace adjustments (all changes marked with #@).
 #
@@ -46,26 +46,6 @@ bins <- function(breaks, closed = "right",
     class = "ggplot2_bins"
   )
 }
-
-is_bins <- function(x) inherits(x, "ggplot2_bins")
-
-#@ print.ggplot2_bins <- function(x, ...) {
-#@   n <- length(x$breaks)
-#@   cat("<Bins>\n")
-#@
-#@   if (x$right_closed) {
-#@     left <- c("[", rep("(", n - 2))
-#@     right <- rep("]", n - 1)
-#@   } else {
-#@     left <- rep("[", n - 1)
-#@     right <- c(rep(")", n - 2), "]")
-#@   }
-#@
-#@   breaks <- format(x$breaks)
-#@   bins <- paste0("* ", left, breaks[-n], ",", breaks[-1], right)
-#@   cat(bins, sep = "\n")
-#@   cat("\n")
-#@ }
 
 # Compute parameters -----------------------------------------------------------
 
@@ -145,72 +125,6 @@ bin_breaks_bins <- function(x_range, bins = 30, center = NULL,
 
   bin_breaks_width(x_range, width, boundary = boundary, center = center,
     closed = closed)
-}
-
-
-# Compute bins ------------------------------------------------------------
-
-bin_vector <- function(x, bins, weight = NULL, pad = FALSE) {
-  #@ check_object(bins, is_bins, "a {.cls ggplot2_bins} object")
-  stopifnot(is_bins(bins))#@
-
-  if (all(is.na(x))) {
-    return(bin_out(length(x), NA, NA, xmin = NA, xmax = NA))
-  }
-
-  if (is.null(weight)) {
-    weight <- rep(1, length(x))
-  } else {
-    weight[is.na(weight)] <- 0
-  }
-
-  #@bin_idx <- cut(x, bins$fuzzy, right = bins$right_closed,
-  #@  include.lowest = TRUE)
-  bin_idx <- bin_cut(x, bins) #@
-  bin_count <- as.numeric(tapply(weight, bin_idx, sum, na.rm = TRUE))
-  bin_count[is.na(bin_count)] <- 0
-
-  bin_x <- (bins$breaks[-length(bins$breaks)] + bins$breaks[-1]) / 2
-  bin_widths <- diff(bins$breaks)
-
-  # Pad row of 0s at start and end
-  if (pad) {
-    bin_count <- c(0, bin_count, 0)
-
-    width1 <- bin_widths[1]
-    widthn <- bin_widths[length(bin_widths)]
-
-    bin_widths <- c(width1, bin_widths, widthn)
-    bin_x <- c(bin_x[1] - width1, bin_x, bin_x[length(bin_x)] + widthn)
-  }
-
-  # Add row for missings
-  if (any(is.na(bins))) {
-    bin_count <- c(bin_count, sum(is.na(bins)))
-    bin_widths <- c(bin_widths, NA)
-    bin_x <- c(bin_x, NA)
-  }
-
-  bin_out(bin_count, bin_x, bin_widths)
-}
-
-bin_out <- function(count = integer(0), x = numeric(0), width = numeric(0),
-  xmin = x - width / 2, xmax = x + width / 2) {
-  density <- count / width / sum(abs(count))
-
-  #@ data_frame0(
-  vctrs::data_frame(#@
-    count = count,
-    x = x,
-    xmin = xmin,
-    xmax = xmax,
-    width = width,
-    density = density,
-    ncount = count / max(abs(count)),
-    ndensity = density / max(abs(density)),
-    .size = length(count),
-    .name_repair = "minimal"#@
-  )
 }
 
 # ------------------------------------------------------------------------

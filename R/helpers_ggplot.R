@@ -201,6 +201,7 @@ breaks_from_scale <- function(breaks, scale) {
   minor_breaks <- scale$get_breaks_minor()
 
   # clamp to limits
+  # FIXME this might be too aggressive for bins at the limits
   limits <- scale$get_limits()
   major_breaks <- major_breaks[(major_breaks >=  limits[[1]]) & (major_breaks <= limits[[2]])]
   minor_breaks <- minor_breaks[(minor_breaks >=  limits[[1]]) & (minor_breaks <= limits[[2]])]

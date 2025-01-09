@@ -49,17 +49,6 @@ dual_param <- function(x, default = list(x = NULL, y = NULL)) {
   }
 }
 
-unique0 <- function(x, ...) if (is.null(x)) x else vctrs::vec_unique(x, ...)
-
-ulevels <- function(x, na.last = TRUE) {
-  if (is.factor(x)) {
-    x <- addNA(x, TRUE)
-    factor(levels(x), levels(x), exclude = NULL)
-  } else {
-    sort(unique0(x), na.last = na.last)
-  }
-}
-
 allow_lambda <- function(x) {
  if (rlang::is_formula(x)) rlang::as_function(x) else x
 }
