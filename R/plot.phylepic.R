@@ -133,10 +133,14 @@ autoplot.phylepic <- function(
     if (is.null(plot.calendar)) {
       cli::cli_abort("{.arg plot.calendar} cannot be {.code NULL} if {.arg plot.epicurve} is provided")
     }
+    date_limits <- NULL
+    if (!is.null(plot.calendar)) {
+      date_limits <- ggplot2::layer_scales(plot.calendar)$x$get_limits()
+    }
     plot.epicurve <- plot.epicurve |>
       replace_scale(scale.date) |>
       replace_scale(scale.fill) |>
-      conform_plot_epicurve()
+      conform_plot_epicurve(date_limits)
     guides <- c(guides, extract_guides(plot.epicurve))
     relheights <- c(relheights, 1)
   }

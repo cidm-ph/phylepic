@@ -1,15 +1,29 @@
+#' Annotate rows with 2D bin positions
+#'
+#' Unlike normal binning stat, this stat does not change the number of rows in
+#' the data. Rather than summing weights, it merely adds `xmin`, `xmax`, `ymin`,
+#' and `ymax` values to the original data. This is useful for [geom_calendar()],
+#' which only has one tile per row and therefore would only have a single entry
+#' contributing to each bin. [ggplot2::stat_bin_2d()] would cause the other
+#' fields to be discarded since it summarises the data.
+#'
+#' @inheritParams stat_bin_2d_auto
+#' @param overflow If `TRUE`, map values that would normally be outside the
+#'   range to peripheral bins that span from the closest limit to the closest
+#'   infinity. You can control this for x and y separately by passing a list.
+#'
+#' @return ggplot2 stat layer.
 #' @export
-#' @rdname geom_calendar
-stat_calendar <- function(
+stat_bin_location <- function(
     mapping = NULL,
     data = NULL,
-    geom = "calendar",
+    geom = "rect",
     position = "identity",
     ...,
-    breaks = "all",
+    overflow = FALSE,
+    breaks = NULL,
     bins = 30,
     binwidth = NULL,
-    drop = TRUE,
     na.rm = FALSE,
     show.legend = NA,
     inherit.aes = TRUE
@@ -17,16 +31,16 @@ stat_calendar <- function(
   ggplot2::layer(
     data = data,
     mapping = mapping,
-    stat = StatCalendar,
+    stat = StatBinLocation,
     geom = geom,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = rlang::list2(
+      overflow = overflow,
       breaks = breaks,
       bins = bins,
       binwidth = binwidth,
-      drop = drop,
       na.rm = na.rm,
       ...
     )
@@ -36,37 +50,27 @@ stat_calendar <- function(
 #' @export
 #' @usage NULL
 #' @format NULL
-#' @rdname geom_calendar
-StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::Stat,
+#' @rdname stat_bin_location
+StatBinLocation <- ggplot2::ggproto("StatBinLocation", ggplot2::Stat,
   required_aes = c("x", "y"),
 
-  setup_data = function(self, data, params) {
-    if (any(duplicated(data$y))) {
-      cli::cli_abort("Data contains duplicated {.field y} values")
-    }
-
-    data
-  },
-
   setup_params = function(self, data, params) {
-    if (is.character(params$drop)) {
-      params$drop <- !identical(params$drop, "none")
-    }
-
-    # params <- fix_bin_params(params, fun = snake_class(self), version = "3.5.2")
     vars <- c("origin", "binwidth", "breaks", "center", "boundary")
     params[vars] <- lapply(params[vars], dual_param, default = NULL)
     params$closed <- dual_param(params$closed, list(x = "right", y = "right"))
+    params$overflow <- dual_param(params$overflow, list(x = FALSE, y = FALSE))
+    params$bins <- dual_param(params$bins, list(x = 30, y = 30))
 
     params
   },
 
   compute_group = function(
     data, scales,
-    binwidth = NULL, bins = 30, breaks = NULL, origin = NULL, drop = TRUE,
-    boundary = 0, closed = NULL, center = NULL
+    overflow = list(x = TRUE, y = TRUE),
+    binwidth = NULL,
+    bins = list(x = 30, y = 30),
+    breaks = NULL, origin = NULL, boundary = 0, closed = NULL, center = NULL
   ) {
-    bins <- dual_param(bins, list(x = 30, y = 30))
     if (!is.null(breaks$x) && is.character(breaks$x)) {
       breaks$x <- breaks_from_scale(breaks$x, scales$x)
     }
@@ -83,15 +87,15 @@ StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::Stat,
       center$y, boundary$y, closed$y
     )
     cut_id <- list(
-      xbin = as.integer(bin_cut_with_overflow(data$x, xbin)),
-      ybin = as.integer(bin_cut(data$y, ybin))
+      xbin = as.integer(bin_cut_with_overflow(data$x, xbin, overflow$x)),
+      ybin = as.integer(bin_cut_with_overflow(data$y, ybin, overflow$y))
     )
 
-    xdim <- bin_loc_with_overflow(xbin$breaks, cut_id$xbin)
+    xdim <- bin_loc_with_overflow(xbin$breaks, cut_id$xbin, overflow$x)
     data$xmin <- xdim$left
     data$xmax <- xdim$right
 
-    ydim <- bin_loc(ybin$breaks, cut_id$ybin)
+    ydim <- bin_loc_with_overflow(ybin$breaks, cut_id$ybin, overflow$y)
     data$ymin <- ydim$left
     data$ymax <- ydim$right
 
@@ -99,7 +103,9 @@ StatCalendar <- ggplot2::ggproto("StatCalendar", ggplot2::Stat,
   }
 )
 
-bin_cut_with_overflow <- function(x, bins) {
+bin_cut_with_overflow <- function(x, bins, overflow = TRUE) {
+  if (!overflow) return(bin_cut(x, bins))
+
   breaks <- c(-Inf, bins$fuzzy, Inf)
   bin_idx <- cut(x, breaks, right = bins$right_closed, include.lowest = TRUE, labels = FALSE)
 
@@ -113,7 +119,9 @@ bin_cut_with_overflow <- function(x, bins) {
   bin_idx
 }
 
-bin_loc_with_overflow <- function(x, id) {
+bin_loc_with_overflow <- function(x, id, overflow = TRUE) {
+  if (!overflow) return(bin_loc(x, id))
+
   x <- c(-Inf, x, Inf)
   left <- x[-length(x)]
   right <- x[-1]

@@ -58,25 +58,25 @@ plot_calendar <- function(
 
       geom_calendar(
         mapping,
-        width = 1L,
-        height = 1L,
         na.rm = TRUE,
         linewidth = 0.3,
         label_params = labels.params,
-        breaks = list("all", NULL),
-        binwidth = list(NULL, 1L)
+        overflow = list(x = TRUE, y = FALSE),
+        breaks = list(x = "all", y = NULL),
+        binwidth = list(x = NULL, y = 1L)
       )
     } else {
       if (!is.null(labels)) {
-        mapping2 <- aes(label = format(ggplot2::after_stat(x), labels))
+        mapping2 <- aes(
+          label = format(ggplot2::after_stat(x), labels),
+        )
         mapping$label <- mapping2$label
       }
 
       geom_calendar(
         mapping,
         stat = "identity",
-        width = 1L,
-        height = 1L,
+        binwidth = 1L,
         na.rm = TRUE,
         linewidth = 0.3,
         label_params = labels.params
@@ -88,6 +88,7 @@ plot_calendar <- function(
       x = .data$.phylepic.date
     )) +
       main_layer +
+      ggplot2::scale_x_date(breaks =  breaks_cached(scales::breaks_extended())) +
       ggplot2::scale_y_continuous(
         expand = ggplot2::expansion(add = 0),
         limits = c(-0.5, nrow(x) - 0.5)

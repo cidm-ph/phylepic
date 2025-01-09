@@ -25,6 +25,7 @@ reference:
 - title: Automatic binning
   contents:
   - stat_bin_auto
+  - stat_bin_location
   - stat_bin_2d_auto
   - breaks_cached
 - title: Phylogenetic tree drawing

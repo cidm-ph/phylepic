@@ -101,7 +101,6 @@ The date range is too big for this type of chart, so we want to focus in on a ti
 date_scale <- scale_x_week(
   name = "Date of sample collection",
   limits = as.Date(c("2023-08-14", "2023-11-06")),
-  oob = scales::oob_keep,
   date_labels = "%d %b",
   week_breaks = 4L,
   week_minor_breaks = 1L

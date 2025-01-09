@@ -41,10 +41,6 @@ edges can be copied from the scale breaks. For this effect to work properly,
 you either need to use fixed scale breaks (e.g. using a vector instead of a
 function), or use the \code{\link[=cached_breaks]{cached_breaks()}} helper.
 }
-\details{
-\code{stat_calendar()} additionally includes some logic to support
-\code{\link[=geom_calendar]{geom_calendar()}} and is probably not useful in other contexts.
-}
 \examples{
 library(ggplot2)
 

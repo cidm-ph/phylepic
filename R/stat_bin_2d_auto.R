@@ -5,9 +5,6 @@
 #' you either need to use fixed scale breaks (e.g. using a vector instead of a
 #' function), or use the [cached_breaks()] helper.
 #'
-#' `stat_calendar()` additionally includes some logic to support
-#'  [geom_calendar()] and is probably not useful in other contexts.
-#'
 #' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,pad,...
 #'   See [ggplot2::stat_bin()].
 #' @param breaks Controls the break positions for the bins.

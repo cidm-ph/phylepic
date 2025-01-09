@@ -10,7 +10,7 @@ scale_x_week(
   labels = waiver(),
   date_labels = waiver(),
   week_minor_breaks = waiver(),
-  oob = oob_infinite,
+  oob = scales::oob_keep,
   limits = NULL,
   ...,
   week_start = getOption("phylepic.week_start")

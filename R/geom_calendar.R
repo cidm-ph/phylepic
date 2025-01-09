@@ -53,11 +53,8 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomRect,
     }
 
     if (nrow(inf) > 0) {
-      width <- min(
-        median(data$xmax - data$xmin, na.rm = TRUE) / 2,
-        median(data$ymax - data$ymin, na.rm = TRUE) * 2
-      )
-      x_range <- coord$limits$x %||% panel_params$x$scale$limits
+      width <- median(data$xmax - data$xmin, na.rm = TRUE) / 2
+      x_range <- coord$limits$x %||% panel_params$x$scale$limits %||% c(min(data$xmin), max(data$xmax))
 
       sign <- ifelse(is.infinite(inf$xmin), inf$xmin, inf$xmax)
       inf$x <- ifelse(sign < 0, inf$xmax, inf$xmin)
@@ -112,14 +109,8 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomRect,
 #' The triangles are drawn with their base (vertical edge) sitting on the scale
 #' limit, and their width is determined based on the tile size..
 #' If you want to use this feature, you need to use the correct `oob` setting on
-#' the date scale as well as a compatible stat, e.g.:
-#'
-#'   - when binning, `stat = "calendar` with [scales::oob_keep()],
-#'   - otherwise, `stat = "identity"` with [oob_infinite()].
-#'
-#' If a binning stat is desired, use [stat_calendar()]. This ensures that the
-#' original date value for each row is propagated through binning (without which
-#' the labels will be wrong).
+#' the date scale as well as a compatible stat, e.g. `stat = "bin_location` with
+#' [scales::oob_keep()].
 #'
 #' Note that the `label` aesthetic will be dropped if the data are not grouped
 #' in the expected way. In general this means that all rows contributing to a
@@ -135,41 +126,29 @@ GeomCalendar <- ggplot2::ggproto("GeomCalendar", ggplot2::GeomRect,
 #' library(ggplot2)
 #'
 #' set.seed(1)
-#' events <- rep(as.Date("2024-01-31") - 0:30, rpois(31, 6))
-#' values <- round(rgamma(length(events), 1, 0.01))
+#' events <- rep(as.Date("2024-01-31") - 0:10, rpois(11, 1))
+#' values <- sample(c("A", "B"), length(events), replace = TRUE)
 #' df <- data.frame(date = events, value = values)
 #'
 #' ggplot(df) +
-#'   stat_calendar(
-#'       aes(date, value, label = after_stat(count)),
+#'   geom_calendar(
+#'       aes(date, seq_along(date), fill = value),
 #'       colour = "white",
 #'       breaks = list(x = "all", y = NULL),
-#'       bins = list(x = NULL, y = 10)
+#'       overflow = TRUE,
+#'       binwidth = list(x = NULL, y = 1)
 #'   ) +
 #'   scale_x_date(
-#'       breaks = week_breaks(2L),
-#'       minor_breaks = week_breaks(1L),
-#'       limits = as.Date(c("2024-01-08", NA)),
-#'       expand = expansion(add = 3.5)
-#'   )
-#'
-#' ggplot(tail(df)) +
-#'   geom_calendar(
-#'       aes(date, value),
-#'       colour = "white",
-#'       stat = "identity",
+#'       breaks = "2 days",
+#'       limits = as.Date(c("2024-01-25", "2024-01-29")),
+#'       oob = scales::oob_keep,
+#'       expand = expansion(add = 1)
 #'   ) +
-#'   scale_x_date(
-#'       breaks = week_breaks(1L),
-#'       date_minor_breaks = "1 day",
-#'       oob = oob_infinite,
-#'       limits = as.Date(c("2024-01-08", NA)),
-#'       expand = expansion(add = 3.5)
-#'   )
+#'   scale_y_continuous(breaks = scales::breaks_width(2))
 geom_calendar <- function(
   mapping = NULL,
   data = NULL,
-  stat = "calendar",
+  stat = "bin_location",
   position = "identity",
   ...,
   linejoin = "mitre",

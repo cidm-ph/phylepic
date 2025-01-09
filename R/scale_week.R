@@ -22,7 +22,7 @@ scale_x_week <- function(
   labels = waiver(),
   date_labels = waiver(),
   week_minor_breaks = waiver(),
-  oob = oob_infinite,
+  oob = scales::oob_keep,
   limits = NULL,
   ...,
   week_start = getOption("phylepic.week_start")
@@ -41,11 +41,11 @@ scale_x_week <- function(
 
   ggplot2::scale_x_date(
     name = name,
-    breaks = breaks,
+    breaks = breaks_cached(breaks),
     date_breaks = waiver(),
     labels = labels,
     date_labels = date_labels,
-    minor_breaks = minor_breaks,
+    minor_breaks = breaks_cached(minor_breaks),
     date_minor_breaks = waiver(),
     oob = oob,
     limits = limits,

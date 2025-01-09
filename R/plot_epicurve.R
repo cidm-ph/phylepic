@@ -33,17 +33,20 @@ plot_epicurve <- function(
       )
     } else {
       hist_args <-
-        if (binned) list(stat = StatBinAuto)
+        if (binned) list(stat = "bin_auto", breaks = "all")
         else list(binwidth = 1)
       rlang::inject(
         ggplot2::geom_histogram(
-          aes(x = .data$.phylepic.date, fill = {{fill}}), !!!hist_args
+          aes(x = .data$.phylepic.date, fill = {{fill}}),
+          colour = "black",
+          linewidth = 0.2,
+          !!!hist_args
         )
       )
     }
     ggplot2::ggplot(x) +
       main_layer +
-      ggplot2::scale_x_date() +
+      ggplot2::scale_x_date(breaks =  breaks_cached(scales::breaks_extended())) +
       ggplot2::scale_y_continuous(
         position = "right",
         expand = ggplot2::expansion(0),
@@ -67,10 +70,11 @@ theme_plot_epicurve <- function() {
   )
 }
 
-conform_plot_epicurve <- function(plot) {
+conform_plot_epicurve <- function(plot, date_limits = NULL) {
   plot <- patch_scale(
     plot, "x", ggplot2::scale_x_date, list(
-    position = "bottom"
+    position = "bottom",
+    limits = date_limits
   ), panel_name = "epicurve", call = rlang::caller_call())
 
   plot <- patch_scale(
