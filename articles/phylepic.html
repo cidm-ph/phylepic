@@ -8,8 +8,8 @@
 <title>phylepic charts: combining phylogenetic trees with epidemic curves • phylepic</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="phylepic charts: combining phylogenetic trees with epidemic curves">
 </head>
 <body>
@@ -124,8 +124,11 @@ metadata correspond to the tip labels and dates. The resulting
 defaults:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/phylepic.html">phylepic</a></span><span class="op">(</span><span class="va">clade</span>, <span class="va">metadata</span>, <span class="va">name</span>, <span class="va">collection_date</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in autoplot.phylepic(object = x, ..., plot.tree = plot.tree, plot.bars</span></span>
+<span><span class="co">#&gt; = plot.bars, : Replaced <span style="color: #0000BB;">"x"</span> scale <span style="color: #00BB00;">limits</span>:</span></span>
+<span><span class="co">#&gt; <span style="color: #D7AF00;">NULL</span> -&gt; date_limits [phylepic: plot.epicurve]</span></span>
 <span><span class="co">#&gt; Warning: Removed 1 row containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
+<span><span class="co">#&gt; (`stat_bin_auto()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Metadata bars were added for all factor columns in the metadata
 frame, with different categorical colour scales. The dates were binned
@@ -143,8 +146,11 @@ default plot needs some configuration to be useful:</p>
 <code class="sourceCode R"><span><span class="va">phydata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phylepic.html">phylepic</a></span><span class="op">(</span><span class="va">tree</span>, <span class="va">metadata</span>, <span class="va">name</span>, <span class="va">collection_date</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">phydata</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in autoplot.phylepic(object = x, ..., plot.tree = plot.tree, plot.bars</span></span>
+<span><span class="co">#&gt; = plot.bars, : Replaced <span style="color: #0000BB;">"x"</span> scale <span style="color: #00BB00;">limits</span>:</span></span>
+<span><span class="co">#&gt; <span style="color: #D7AF00;">NULL</span> -&gt; date_limits [phylepic: plot.epicurve]</span></span>
 <span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
+<span><span class="co">#&gt; (`stat_bin_auto()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-8-1.png" width="1056"></p>
 <div class="section level3">
 <h3 id="the-date-scale">The date scale<a class="anchor" aria-label="anchor" href="#the-date-scale"></a>
@@ -160,10 +166,10 @@ able to specify the breaks (tick labels) in intervals of weeks:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">date_scale</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scale_x_week.html">scale_x_week</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"Date of sample collection"</span>,</span>
-<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-08-14"</span>, <span class="st">"2023-11-15"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-08-14"</span>, <span class="st">"2023-11-06"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  date_labels <span class="op">=</span> <span class="st">"%d %b"</span>,</span>
 <span>  week_breaks <span class="op">=</span> <span class="fl">4L</span>,</span>
-<span>  week_minor_breaks <span class="op">=</span> <span class="fl">2L</span></span>
+<span>  week_minor_breaks <span class="op">=</span> <span class="fl">1L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>We can also control the relative heights of the two rows of panels in
 the final grid using <code>height.tree</code> (choosing here to make is
@@ -171,8 +177,8 @@ the final grid using <code>height.tree</code> (choosing here to make is
 both the relevant panels:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">phydata</span>, scale.date <span class="op">=</span> <span class="va">date_scale</span>, height.tree <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_bin_auto()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-11-1.png" width="1056"></p>
 <p>Note that dates outside our chosen date limits are drawn on the
 calendar as triangles at the corresponding edge of the scale. Some rows
@@ -261,8 +267,8 @@ takes arguments in the form
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Removed 11 rows containing missing values or values outside the scale range</span></span>
 <span><span class="co">#&gt; (`geom_point()`). [phylepic: plot.tree]</span></span>
-<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_bin_auto()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-14-1.png" width="1056"></p>
 <p>Each <code>plot.*</code> argument will normally be given a function
 that is called with a single parameter: the phylepic object provided to
@@ -330,8 +336,8 @@ scale).</p>
 <span><span class="co">#&gt; (`geom_point()`). [phylepic: plot.tree]</span></span>
 <span><span class="co">#&gt; Warning: Dropped 8 calendar arrows with no fill or colour</span></span>
 <span><span class="co">#&gt; (`geom_calendar()`) [phylepic: plot.calendar]</span></span>
-<span><span class="co">#&gt; Warning: Removed 28 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_week()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
+<span><span class="co">#&gt; Warning: Removed 7 rows containing non-finite outside the scale range</span></span>
+<span><span class="co">#&gt; (`stat_bin_auto()`). [phylepic: plot.epicurve]</span></span></code></pre></div>
 <p><img src="phylepic_files/figure-html/unnamed-chunk-16-1.png" width="1056"></p>
 <p>Because the cluster colour scales are consistent across panels, the
 legend guides are automatically combined.</p>

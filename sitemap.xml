@@ -7,6 +7,7 @@
 <url><loc>https://cidm-ph.github.io/phylepic/authors.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/index.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/news/index.html</loc></url>
+<url><loc>https://cidm-ph.github.io/phylepic/reference/breaks_cached.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/reference/coord_tree.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/reference/create_tree_layout.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/reference/drop.clade.html</loc></url>
@@ -22,8 +23,9 @@
 <url><loc>https://cidm-ph.github.io/phylepic/reference/plot_epicurve.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/reference/plot_tree.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/reference/scale_x_week.html</loc></url>
-<url><loc>https://cidm-ph.github.io/phylepic/reference/stat_week.html</loc></url>
-<url><loc>https://cidm-ph.github.io/phylepic/reference/stat_week_2d.html</loc></url>
+<url><loc>https://cidm-ph.github.io/phylepic/reference/stat_bin_2d_auto.html</loc></url>
+<url><loc>https://cidm-ph.github.io/phylepic/reference/stat_bin_auto.html</loc></url>
+<url><loc>https://cidm-ph.github.io/phylepic/reference/stat_bin_location.html</loc></url>
 <url><loc>https://cidm-ph.github.io/phylepic/reference/week_breaks.html</loc></url>
 </urlset>
 
