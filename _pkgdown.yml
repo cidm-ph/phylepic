@@ -18,7 +18,6 @@ reference:
   contents:
   - geom_calendar
   - scale_x_week
-  - stat_week
   - stat_week_2d
   - week_breaks
   - oob_infinite

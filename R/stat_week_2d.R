@@ -73,7 +73,7 @@ stat_week_2d <- function(
 #' @export
 #' @usage NULL
 #' @format NULL
-#' @rdname stat_week
+#' @rdname stat_week_2d
 StatWeek2d <- ggplot2::ggproto("StatWeek2d", ggplot2::Stat,
   default_aes = aes(weight = 1, fill = ggplot2::after_stat(count)),
 

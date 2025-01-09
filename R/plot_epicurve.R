@@ -22,19 +22,21 @@ plot_epicurve <- function(
     x <- as.data.frame(x)
     stopifnot(is.tip_data(x))
 
-    main_layer <- if (weeks) {
+    hist_args <- if (weeks) {
       lifecycle::deprecate_warn(
         "0.3.0", "plot_epicurve(weeks)",
         details = "Use plot_epicurve(binned = TRUE) and adjust breaks on the date scale"
       )
-      stat_week(
-        aes(x = .data$.phylepic.date, fill = {{fill}}),
-        week_start = week_start
-      )
+      list(breaks = week_breaks(week_start = week_start)(range(x$.phylepic.date, na.rm = TRUE)))
+      # TODO with ggplot2 > 3.5.1, can switch to this version:
+      # list(breaks = week_breaks(week_start = week_start))
+    } else if (binned) {
+      list(stat = "bin_auto", breaks = "all")
     } else {
-      hist_args <-
-        if (binned) list(stat = "bin_auto", breaks = "all")
-        else list(binwidth = 1)
+      list(binwidth = 1)
+    }
+
+    ggplot2::ggplot(x) +
       rlang::inject(
         ggplot2::geom_histogram(
           aes(x = .data$.phylepic.date, fill = {{fill}}),
@@ -42,11 +44,7 @@ plot_epicurve <- function(
           linewidth = 0.2,
           !!!hist_args
         )
-      )
-    }
-    ggplot2::ggplot(x) +
-      main_layer +
-      ggplot2::scale_x_date(breaks =  breaks_cached(scales::breaks_extended())) +
+      ) +
       ggplot2::scale_y_continuous(
         position = "right",
         expand = ggplot2::expansion(0),

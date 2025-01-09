@@ -87,6 +87,7 @@ autoplot.phylepic <- function(
 ) {
   if (is.null(scale.date)) {
     scale.date <- ggplot2::scale_x_date(
+      breaks =  breaks_cached(scales::breaks_pretty()),
       expand =  ggplot2::expansion(mult = c(0.1, 0.1)),
       oob = oob_infinite
     )

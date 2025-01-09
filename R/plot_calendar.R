@@ -88,7 +88,6 @@ plot_calendar <- function(
       x = .data$.phylepic.date
     )) +
       main_layer +
-      ggplot2::scale_x_date(breaks =  breaks_cached(scales::breaks_extended())) +
       ggplot2::scale_y_continuous(
         expand = ggplot2::expansion(add = 0),
         limits = c(-0.5, nrow(x) - 0.5)
