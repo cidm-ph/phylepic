@@ -60,8 +60,7 @@ plot_calendar <- function(
         breaks = list(x = "all", y = NULL),
         binwidth = list(x = NULL, y = 1L)
       )
-    }
-    else {
+    } else {
       if (!is.null(labels)) {
         mapping2 <- aes(
           label = format(ggplot2::after_stat(x), labels),
@@ -118,8 +117,9 @@ theme_plot_calendar <- function() {
 conform_plot_calendar <- function(plot, n) {
   plot <- patch_scale(
     plot, "x", ggplot2::scale_x_date, list(
-    position = "bottom"
-  ), panel_name = "calendar", call = rlang::caller_call())
+      position = "bottom"
+    ), panel_name = "calendar", call = rlang::caller_call()
+  )
 
   plot <- patch_scale(
     plot, "y", ggplot2::scale_y_continuous, list(

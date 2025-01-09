@@ -3,10 +3,10 @@
 #' This is mostly equivalent to [ggplot2::stat_bin_2d()] except that the bin
 #' edges can be copied from the scale breaks. For this effect to work properly,
 #' you either need to use fixed scale breaks (e.g. using a vector instead of a
-#' function), or use the [cached_breaks()] helper.
+#' function), or use the [breaks_cached()] helper.
 #'
-#' @param mapping,data,geom,position,na.rm,show.legend,inherit.aes,pad,...
-#'   See [ggplot2::stat_bin()].
+#' @param mapping,data,geom,position,bins,binwidth,drop,na.rm,show.legend,inherit.aes,...
+#'   See [ggplot2::stat_bin_2d()].
 #' @param breaks Controls the break positions for the bins.
 #'   Can be `NULL`, a numeric vector, or a function as per [ggplot2::stat_bin()].
 #'   Can additionally be a character specifying which breaks from the scale
@@ -30,18 +30,18 @@
 #'   scale_y_continuous(limits = c(4, 10)) +
 #'   stat_bin_2d_auto(breaks = list("major", NULL), bins = list(NULL, 20))
 stat_bin_2d_auto <- function(
-    mapping = NULL,
-    data = NULL,
-    geom = "tile",
-    position = "identity",
-    ...,
-    breaks = "all",
-    bins = 30,
-    binwidth = NULL,
-    drop = TRUE,
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
+  mapping = NULL,
+  data = NULL,
+  geom = "tile",
+  position = "identity",
+  ...,
+  breaks = "all",
+  bins = 30,
+  binwidth = NULL,
+  drop = TRUE,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
 ) {
   ggplot2::layer(
     data = data,

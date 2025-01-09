@@ -63,7 +63,7 @@ ceiling_week <- function(date) {
 
 date_to_week <- function(x, week_start) {
   if (!inherits(x, "Date")) {
-    cli::cli_abort("{.fn stat_week} works with objects of class {.cls Date} only")
+    cli::cli_abort("{.fn week_breaks} works with objects of class {.cls Date} only")
   }
 
   wday <- as.POSIXlt(x)$wday + 1L

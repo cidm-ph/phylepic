@@ -63,7 +63,7 @@ patch_scale <- function(
     old.call <- substitute(old.scale)
     new.call <- substitute(params)
     new.value <- params[[k]]
-    if (!identical(old.scale[[k]] , new.value, ignore.environment = TRUE)) {
+    if (!identical(old.scale[[k]], new.value, ignore.environment = TRUE)) {
       cli::cli_warn(paste0(
         "Replaced {.val {aesthetic}} scale {.field {k}}: ",
         "{cli::code_highlight(deparse1(old.call[[k]]))} -> ",

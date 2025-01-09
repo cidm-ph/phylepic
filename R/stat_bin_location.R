@@ -8,6 +8,8 @@
 #' fields to be discarded since it summarises the data.
 #'
 #' @inheritParams stat_bin_2d_auto
+#' @param mapping,data,geom,position,bins,binwidth,na.rm,show.legend,inherit.aes,...
+#'   See [ggplot2::stat_bin_2d()].
 #' @param overflow If `TRUE`, map values that would normally be outside the
 #'   range to peripheral bins that span from the closest limit to the closest
 #'   infinity. You can control this for x and y separately by passing a list.
@@ -15,18 +17,18 @@
 #' @return ggplot2 stat layer.
 #' @export
 stat_bin_location <- function(
-    mapping = NULL,
-    data = NULL,
-    geom = "rect",
-    position = "identity",
-    ...,
-    overflow = FALSE,
-    breaks = NULL,
-    bins = 30,
-    binwidth = NULL,
-    na.rm = FALSE,
-    show.legend = NA,
-    inherit.aes = TRUE
+  mapping = NULL,
+  data = NULL,
+  geom = "rect",
+  position = "identity",
+  ...,
+  overflow = FALSE,
+  breaks = NULL,
+  bins = 30,
+  binwidth = NULL,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
 ) {
   ggplot2::layer(
     data = data,

@@ -37,8 +37,7 @@ Imports:
     lifecycle,
     rlang,
     scales,
-    tidygraph,
-    vctrs
+    tidygraph
 URL: https://github.com/cidm-ph/phylepic, https://cidm-ph.github.io/phylepic/
 BugReports: https://github.com/cidm-ph/phylepic/issues
 Config/testthat/edition: 3

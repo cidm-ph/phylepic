@@ -22,6 +22,8 @@ stat_bin_location(
 )
 }
 \arguments{
+\item{mapping, data, geom, position, bins, binwidth, na.rm, show.legend, inherit.aes, ...}{See \code{\link[ggplot2:geom_bin_2d]{ggplot2::stat_bin_2d()}}.}
+
 \item{overflow}{If \code{TRUE}, map values that would normally be outside the
 range to peripheral bins that span from the closest limit to the closest
 infinity. You can control this for x and y separately by passing a list.}

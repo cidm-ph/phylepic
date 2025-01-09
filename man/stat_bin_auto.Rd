@@ -38,7 +38,7 @@ ggplot2 stat layer.
 This is mostly equivalent to \code{\link[ggplot2:geom_histogram]{ggplot2::stat_bin()}} except that the bin edges
 are copied from the scale breaks. For this effect to work properly, you
 either need to use fixed scale breaks (e.g. using a vector instead of a
-function), or use the \code{\link[=cached_breaks]{cached_breaks()}} helper.
+function), or use the \code{\link[=breaks_cached]{breaks_cached()}} helper.
 }
 \examples{
 library(ggplot2)

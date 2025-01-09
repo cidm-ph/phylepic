@@ -112,8 +112,9 @@ conform_plot_bars <- function(plot) {
   # The y scale expansion must match or else the plots won't line up.
   plot <- patch_scale(
     plot, "y", ggplot2::scale_y_continuous, list(
-    expand = ggplot2::expansion(0)
-  ), panel_name = "bars", call = rlang::caller_call())
+      expand = ggplot2::expansion(0)
+    ), panel_name = "bars", call = rlang::caller_call()
+  )
 
   plot <- plot + ggplot2::theme(legend.position = "none")
   annotate_conditions_with_panel(plot, "bars")

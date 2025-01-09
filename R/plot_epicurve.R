@@ -71,9 +71,10 @@ theme_plot_epicurve <- function() {
 conform_plot_epicurve <- function(plot, date_limits = NULL) {
   plot <- patch_scale(
     plot, "x", ggplot2::scale_x_date, list(
-    position = "bottom",
-    limits = date_limits
-  ), panel_name = "epicurve", call = rlang::caller_call())
+      position = "bottom",
+      limits = date_limits
+    ), panel_name = "epicurve", call = rlang::caller_call()
+  )
 
   plot <- patch_scale(
     plot, "y", ggplot2::scale_y_continuous, list(

@@ -3,7 +3,7 @@
 #' This is mostly equivalent to [ggplot2::stat_bin()] except that the bin edges
 #' are copied from the scale breaks. For this effect to work properly, you
 #' either need to use fixed scale breaks (e.g. using a vector instead of a
-#' function), or use the [cached_breaks()] helper.
+#' function), or use the [breaks_cached()] helper.
 #'
 #' @param breaks Which breaks from the scale should be used? `"minor"` for minor
 #'   breaks, `"major"` for major breaks, or `"all"` for both.

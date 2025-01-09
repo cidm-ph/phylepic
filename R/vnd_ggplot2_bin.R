@@ -123,8 +123,9 @@ bin_breaks_bins <- function(x_range, bins = 30, center = NULL,
     width <- (x_range[2] - x_range[1]) / (bins - 1)
   }
 
-  bin_breaks_width(x_range, width, boundary = boundary, center = center,
-    closed = closed)
+  bin_breaks_width(
+    x_range, width, boundary = boundary, center = center, closed = closed
+  )
 }
 
 # ------------------------------------------------------------------------

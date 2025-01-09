@@ -23,7 +23,7 @@ stat_bin_2d_auto(
 )
 }
 \arguments{
-\item{mapping, data, geom, position, na.rm, show.legend, inherit.aes, pad, ...}{See \code{\link[ggplot2:geom_histogram]{ggplot2::stat_bin()}}.}
+\item{mapping, data, geom, position, bins, binwidth, drop, na.rm, show.legend, inherit.aes, ...}{See \code{\link[ggplot2:geom_bin_2d]{ggplot2::stat_bin_2d()}}.}
 
 \item{breaks}{Controls the break positions for the bins.
 Can be \code{NULL}, a numeric vector, or a function as per \code{\link[ggplot2:geom_histogram]{ggplot2::stat_bin()}}.
@@ -39,7 +39,7 @@ ggplot2 stat layer.
 This is mostly equivalent to \code{\link[ggplot2:geom_bin_2d]{ggplot2::stat_bin_2d()}} except that the bin
 edges can be copied from the scale breaks. For this effect to work properly,
 you either need to use fixed scale breaks (e.g. using a vector instead of a
-function), or use the \code{\link[=cached_breaks]{cached_breaks()}} helper.
+function), or use the \code{\link[=breaks_cached]{breaks_cached()}} helper.
 }
 \examples{
 library(ggplot2)

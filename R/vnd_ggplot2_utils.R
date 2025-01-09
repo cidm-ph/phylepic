@@ -50,7 +50,7 @@ dual_param <- function(x, default = list(x = NULL, y = NULL)) {
 }
 
 allow_lambda <- function(x) {
- if (rlang::is_formula(x)) rlang::as_function(x) else x
+  if (rlang::is_formula(x)) rlang::as_function(x) else x
 }
 
 is.scale <- function(x) inherits(x, "Scale")

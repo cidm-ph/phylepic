@@ -87,8 +87,9 @@ conform_plot_tree <- function(plot) {
   # The y scale expansion must match or else the plots won't line up.
   plot <- patch_scale(
     plot, "y", ggplot2::scale_y_continuous, list(
-    expand = ggplot2::expansion(add = 0.5)
-  ), panel_name = "tree", call = rlang::caller_call())
+      expand = ggplot2::expansion(add = 0.5)
+    ), panel_name = "tree", call = rlang::caller_call()
+  )
 
   if (!inherits(plot$coordinate, "CoordTree")) {
     cli::cli_inform("adding {.fn coord_tree} to {.arg plot.tree}")
@@ -97,8 +98,9 @@ conform_plot_tree <- function(plot) {
 
   plot <- patch_scale(
     plot, "x", ggplot2::scale_x_continuous, list(
-    trans = scales::transform_reverse()
-  ), panel_name = "tree", call = rlang::caller_call())
+      trans = scales::transform_reverse()
+    ), panel_name = "tree", call = rlang::caller_call()
+  )
 
   lo_errors <- c()
   if (! inherits(plot$data, "layout_tbl_graph")) {
