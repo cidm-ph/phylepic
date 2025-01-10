@@ -4,7 +4,7 @@ run_stat_bin_location <- function(data, ..., .x.scale = list()) {
     rlang::inject(ggplot2::scale_x_date(!!!.x.scale)) +
     stat_bin_location(...)
 
-  layer_data(plot)
+  ggplot2::layer_data(plot)
 }
 
 s2d <- function(x) as.numeric(as.Date(x))
