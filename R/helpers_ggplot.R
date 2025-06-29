@@ -161,7 +161,7 @@ annotate_conditions_with_panel <- function(plot, panel_name) {
 
 #' @importFrom ggplot2 ggplot_build
 #' @export
-ggplot_build.phylepic_ggplot <- function(plot) {
+ggplot_build.phylepic_ggplot <- function(plot, ...) {
   panel_name <- attr(plot, "phylepic.panel")
   build <- withCallingHandlers(
     NextMethod(generic = "ggplot_build", object = plot),
