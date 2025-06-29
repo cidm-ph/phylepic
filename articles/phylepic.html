@@ -155,15 +155,11 @@ default plot needs some configuration to be useful:</p>
 <div class="section level3">
 <h3 id="the-date-scale">The date scale<a class="anchor" aria-label="anchor" href="#the-date-scale"></a>
 </h3>
-<p>We can choose the first day of the week to match the local
-conventions:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>phylepic.week_start <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
 <p>The date range is too big for this type of chart, so we want to focus
 in on a time period near the outbreak clusters Clust-04 and Clust-05. By
 using <code>scale_x_week</code>, we get some conveniences such as being
 able to specify the breaks (tick labels) in intervals of weeks:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">date_scale</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scale_x_week.html">scale_x_week</a></span><span class="op">(</span></span>
 <span>  name <span class="op">=</span> <span class="st">"Date of sample collection"</span>,</span>
 <span>  limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2023-08-14"</span>, <span class="st">"2023-11-06"</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -171,6 +167,19 @@ able to specify the breaks (tick labels) in intervals of weeks:</p>
 <span>  week_breaks <span class="op">=</span> <span class="fl">4L</span>,</span>
 <span>  week_minor_breaks <span class="op">=</span> <span class="fl">1L</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>Any date scale will do, however. The important thing to note is that
+the data will be binned based on the breaks (the union of major and
+minor breaks) of the date axis. So if you want weekly binning, ensure
+that the minor breaks are 1 week apart. For annual binning, make them 1
+year apart
+(e.g. <code>scale_x_date(date_breaks = "5 years", date_minor_breaks = "1 year")</code>)
+and so on. If you don’t want to bin at all, you can disable binning per
+panel with <code>plot_calendar(binned = FALSE)</code> and
+<code>plot_epicurve(binned = FALSE)</code>.</p>
+<p>We can choose the first day of the week to match the local
+conventions:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>phylepic.week_start <span class="op">=</span> <span class="st">"Monday"</span><span class="op">)</span></span></code></pre></div>
 <p>We can also control the relative heights of the two rows of panels in
 the final grid using <code>height.tree</code> (choosing here to make is
 6 times the height of the epidemic curve). Our date scale is passed to
@@ -183,8 +192,7 @@ both the relevant panels:</p>
 <p>Note that dates outside our chosen date limits are drawn on the
 calendar as triangles at the corresponding edge of the scale. Some rows
 are missing date metadata, so this allows us to distinguish them
-visually. This feature is enabled by the default <code>oob</code> (out
-of bounds) argument to <code>scale_x_week</code>.</p>
+visually.</p>
 </div>
 <div class="section level3">
 <h3 id="manipulating-the-tree">Manipulating the tree<a class="anchor" aria-label="anchor" href="#manipulating-the-tree"></a>
@@ -365,7 +373,7 @@ was missing or out of range.</li>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
