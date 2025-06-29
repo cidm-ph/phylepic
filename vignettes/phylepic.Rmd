@@ -88,13 +88,6 @@ plot(phydata)
 ```
 
 ### The date scale
-
-We can choose the first day of the week to match the local conventions:
-
-```{r}
-options(phylepic.week_start = "Monday")
-```
-
 The date range is too big for this type of chart, so we want to focus in on a time period near the outbreak clusters Clust-04 and Clust-05. By using `scale_x_week`, we get some conveniences such as being able to specify the breaks (tick labels) in intervals of weeks:
 
 ```{r}
@@ -107,13 +100,22 @@ date_scale <- scale_x_week(
 )
 ```
 
+Any date scale will do, however. The important thing to note is that the data will be binned based on the breaks (the union of major and minor breaks) of the date axis. So if you want weekly binning, ensure that the minor breaks are 1 week apart. For annual binning, make them 1 year apart (e.g. `scale_x_date(date_breaks = "5 years", date_minor_breaks = "1 year")`) and so on.
+If you don't want to bin at all, you can disable binning per panel with `plot_calendar(binned = FALSE)` and `plot_epicurve(binned = FALSE)`.
+
+We can choose the first day of the week to match the local conventions:
+
+```{r}
+options(phylepic.week_start = "Monday")
+```
+
 We can also control the relative heights of the two rows of panels in the final grid using `height.tree` (choosing here to make is 6 times the height of the epidemic curve). Our date scale is passed to both the relevant panels:
 
 ```{r, fig.width=11, fig.height=9}
 plot(phydata, scale.date = date_scale, height.tree = 6)
 ```
 
-Note that dates outside our chosen date limits are drawn on the calendar as triangles at the corresponding edge of the scale. Some rows are missing date metadata, so this allows us to distinguish them visually. This feature is enabled by the default `oob` (out of bounds) argument to `scale_x_week`.
+Note that dates outside our chosen date limits are drawn on the calendar as triangles at the corresponding edge of the scale. Some rows are missing date metadata, so this allows us to distinguish them visually.
 
 ### Manipulating the tree
 
