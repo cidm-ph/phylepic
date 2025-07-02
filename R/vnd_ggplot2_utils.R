@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-is.waive <- function(x) {
+is_waiver <- function(x) {
   inherits(x, "waiver")
 }
 

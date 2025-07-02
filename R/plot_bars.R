@@ -48,7 +48,7 @@ plot_bars <- function(phylepic, ...) {
       p <- p + scales[[i]]
 
       m <- aes(y = .data$.phylepic.index)
-      m$x <- if (is.waive(scales[[i]]$name)) name else scales[[i]]$name
+      m$x <- if (is_waiver(scales[[i]]$name)) name else scales[[i]]$name
       m$fill <- rlang::sym(name)
       m$colour <- rlang::quo(dplyr::if_else(
         is.na(.data[[name]]),

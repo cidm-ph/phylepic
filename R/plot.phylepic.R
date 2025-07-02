@@ -92,7 +92,7 @@ autoplot.phylepic <- function(
       oob = oob_infinite
     )
   }
-  if (is.waive(scale.date$name)) {
+  if (is_waiver(scale.date$name)) {
     scale.date$name <- object$dates
   }
 

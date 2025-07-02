@@ -27,8 +27,8 @@ scale_x_week <- function(
   ...,
   week_start = getOption("phylepic.week_start")
 ) {
-  if (is.waive(week_breaks)) week_breaks <- 2L
-  if (is.waive(week_minor_breaks)) week_minor_breaks <- 1L
+  if (is_waiver(week_breaks)) week_breaks <- 2L
+  if (is_waiver(week_minor_breaks)) week_minor_breaks <- 1L
 
   breaks <- week_breaks(week_breaks, week_start = week_start)
   minor_breaks <- week_breaks(week_minor_breaks, week_start = week_start)
