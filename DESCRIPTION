@@ -41,3 +41,5 @@ Imports:
 URL: https://github.com/cidm-ph/phylepic, https://cidm-ph.github.io/phylepic/
 BugReports: https://github.com/cidm-ph/phylepic/issues
 Config/testthat/edition: 3
+Depends: 
+    R (>= 4.1)
