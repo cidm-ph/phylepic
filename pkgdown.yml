@@ -3,7 +3,7 @@ pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   phylepic: phylepic.html
-last_built: 2025-06-29T23:34Z
+last_built: 2025-07-02T00:34Z
 urls:
   reference: https://cidm-ph.github.io/phylepic/reference
   article: https://cidm-ph.github.io/phylepic/articles
