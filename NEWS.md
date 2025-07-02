@@ -1,4 +1,4 @@
-# phylepic (development version)
+# phylepic 0.3.0
 
 * Update citation to published manuscript.
 * Overhaul the way that binning works. Instead of special stats that handled
