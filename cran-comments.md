@@ -1,15 +1,11 @@
 ## R CMD check results
 
-0 errors | 2 warnings | 0 notes
+0 errors | 1 warning | 0 notes
 
 This warnings are expected:
 
-❯ checking S3 generic/method consistency ... WARNING
-  ggplot_gtable:
-    function(data)
-  ggplot_gtable.phylepic_ggplot_build:
-    function(plot)
-  See section ‘Generic functions and methods’ in the ‘Writing R
-  Extensions’ manual.
+This is a resubmission now that ggplot2 4.0.0 has been released.
+I now depend on at least that version of ggplot2 so that I can
+adopt its changed S3 method signatures.
 
-This is because the generic signatures in this release are consistent with the version of the generics in the upcoming ggplot2 4.0.0 release. This change was coordinated with ggplot2 maintainers.
+I have also updated my email address.
