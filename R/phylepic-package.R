@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @importFrom ggplot2 waiver
+#' @importFrom ggplot2 is_waiver
 #' @importFrom ggplot2 aes
 #' @importFrom grid unit
 #' @importFrom rlang .data

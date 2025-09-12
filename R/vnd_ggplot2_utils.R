@@ -20,10 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-is_waiver <- function(x) {
-  inherits(x, "waiver")
-}
-
 ggname <- function(prefix, grob) {
   grob$name <- grid::grobName(grob, prefix)
   grob
@@ -52,5 +48,3 @@ dual_param <- function(x, default = list(x = NULL, y = NULL)) {
 allow_lambda <- function(x) {
   if (rlang::is_formula(x)) rlang::as_function(x) else x
 }
-
-is.scale <- function(x) inherits(x, "Scale")
