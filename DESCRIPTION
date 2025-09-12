@@ -1,7 +1,7 @@
 Package: phylepic
 Title: Combined Visualisation of Phylogenetic and Epidemiological Data
 Version: 0.2.1.9000
-Authors@R: 
+Authors@R:
     c(person(given = "Carl",
              family = "Suster",
              email = "Carl.Suster@health.nsw.gov.au",
@@ -19,19 +19,19 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Suggests: 
+Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
-Imports: 
+Imports:
     ape,
     cli,
     cowplot,
     dplyr,
     forcats,
     ggnewscale,
-    ggplot2 (>= 3.5.2),
+    ggplot2 (>= 4.0.0),
     ggraph,
     igraph,
     lifecycle,
@@ -41,5 +41,5 @@ Imports:
 URL: https://github.com/cidm-ph/phylepic, https://cidm-ph.github.io/phylepic/
 BugReports: https://github.com/cidm-ph/phylepic/issues
 Config/testthat/edition: 3
-Depends: 
+Depends:
     R (>= 4.1)
