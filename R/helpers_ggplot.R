@@ -23,10 +23,10 @@ oob_infinite <- function(x, range = c(0, 1)) {
 
 replace_scale <- function(plot, scale) {
   if (is.null(scale)) return(plot)
-  old.scale <- plot$scales$get_scales(scale$aesthetics)
+  old.scale <- plot@scales$get_scales(scale$aesthetics)
   if (!is.null(old.scale)) {
-    prev_aes <- plot$scales$find(scale$aesthetics)
-    plot$scales$scales <- plot$scales$scales[!prev_aes]
+    prev_aes <- plot@scales$find(scale$aesthetics)
+    plot@scales$scales <- plot@scales$scales[!prev_aes]
   }
   plot + scale
 }
@@ -41,13 +41,13 @@ patch_scale <- function(
   plot, aesthetic, constructor, params = list(),
   call = rlang::caller_call(), panel_name = "<unknown>"
 ) {
-  old.scale <- plot$scales$get_scales(aesthetic)
+  old.scale <- plot@scales$get_scales(aesthetic)
   if (is.null(old.scale)) {
     old.scale <- constructor()
   } else {
     # remove the existing scale to prevent scale replacement warning
-    prev_aes <- plot$scales$find(old.scale$aesthetics)
-    plot$scales$scales <- plot$scales$scales[!prev_aes]
+    prev_aes <- plot@scales$find(old.scale$aesthetics)
+    plot@scales$scales <- plot@scales$scales[!prev_aes]
 
     new.class <- class(constructor())
     if (!inherits(old.scale, new.class[[1]])) {
@@ -96,7 +96,7 @@ warn_theme <- function(plot_theme, ..., .name) {
 
 extract_theme <- function(plot, complete = FALSE) {
   if (!inherits(plot, "ggplot_built")) plot <- ggplot2::ggplot_build(plot)
-  theme <- plot$plot$theme
+  theme <- plot@plot$theme
 
   # ggplot2 does more than this internally to complete themes...
   if (complete) theme <- ggplot2::theme_get() + theme
@@ -112,7 +112,7 @@ extract_guides <- function(plot) {
       invokeRestart("muffleWarning")
     }
   )
-  plot$plot$guides
+  plot@plot$guides
 }
 
 merge_guides <- function(guides) {

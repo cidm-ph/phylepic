@@ -91,7 +91,7 @@ conform_plot_tree <- function(plot) {
     ), panel_name = "tree", call = rlang::caller_call()
   )
 
-  if (!inherits(plot$coordinate, "CoordTree")) {
+  if (!inherits(plot@coordinates, "CoordTree")) {
     cli::cli_inform("adding {.fn coord_tree} to {.arg plot.tree}")
     plot@coordinates <- coord_tree()
   }
@@ -103,17 +103,17 @@ conform_plot_tree <- function(plot) {
   )
 
   lo_errors <- c()
-  if (! inherits(plot$data, "layout_tbl_graph")) {
+  if (! inherits(plot@data, "layout_tbl_graph")) {
     lo_errors <- c(lo_errors, "x" = "{.arg plot.tree} must be a graph layout prepared by {.pkg ggraph}")
   }
-  graph <- attr(plot$data, "graph")
+  graph <- attr(plot@data, "graph")
   if (!tidygraph::with_graph(graph, tidygraph::graph_is_tree())) {
     lo_errors <- c(lo_errors, "x" = "{.arg plot.tree} uses a graph that is not a tree")
   }
-  if (layout_is_circular(plot$data)) {
+  if (layout_is_circular(plot@data)) {
     lo_errors <- c(lo_errors, "x" = "{.arg plot.tree} is circular")
   }
-  if (!layout_is_horizontal(plot$data)) {
+  if (!layout_is_horizontal(plot@data)) {
     lo_errors <- c(lo_errors, "x" = "{.arg plot.tree} does not look like a horizontal tree")
   }
   if (length(lo_errors) > 0) {
@@ -127,7 +127,7 @@ conform_plot_tree <- function(plot) {
   plot <-
     plot +
     warn_theme(
-      ggplot2::theme_get() + plot$theme,
+      ggplot2::theme_get() + plot@theme,
       panel.background = ggplot2::element_blank(),
       panel.grid = ggplot2::element_blank(),
       legend.position = "none",
