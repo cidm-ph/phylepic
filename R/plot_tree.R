@@ -93,7 +93,7 @@ conform_plot_tree <- function(plot) {
 
   if (!inherits(plot$coordinate, "CoordTree")) {
     cli::cli_inform("adding {.fn coord_tree} to {.arg plot.tree}")
-    plot <- plot + coord_tree()
+    plot@coordinates <- coord_tree()
   }
 
   plot <- patch_scale(
