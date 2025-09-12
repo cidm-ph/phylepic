@@ -4,11 +4,12 @@ Version: 0.2.1.9000
 Authors@R:
     c(person(given = "Carl",
              family = "Suster",
-             email = "Carl.Suster@health.nsw.gov.au",
+             email = "carl.suster@sydney.edu.au",
              role = c("aut", "cre"),
              comment = c(ORCID = "0000-0001-7021-9380")),
       person("Western Sydney Local Health District, NSW Health",
-             role = "cph"))
+             role = "cph",
+             comment = "2024-2025"))
 Description: A collection of utilities and 'ggplot2' extensions to assist with
   visualisations in genomic epidemiology. This includes the 'phylepic' chart,
   a visual combination of a phylogenetic tree and a matched epidemic curve.
